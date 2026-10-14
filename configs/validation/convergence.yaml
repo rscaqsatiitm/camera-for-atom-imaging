@@ -1,0 +1,36 @@
+# Convergence appendix, about the V1 baseline (values copied from the V1 fit; Gaussian rate spread).
+name: convergence
+seed: 4004
+filling: 0.512
+threshold_e: 40.98
+base:
+  pitch_obj_um: 0.90196   # 4.6 um / 5.1
+  waist_px: 1.7
+  box: 7
+  mu: 68.75
+  lam0: 18.66
+  sigma: 0.115
+  gain: 0.107
+  rs: 0.1226
+  L: 1.36e-4
+h_factors: [4, 2, 1, 0.5, 0.25]
+ds_values: [0.04, 0.02, 0.01, 0.005, 0.0025]
+n_tau_values: [8, 16, 48, 96]
+psf_na: 0.55
+px_per_fwhm: 2.0
+supersample_values: [2, 4, 8, 16]
+n_quad_values: [16, 32, 64, 128, 256]
+is_target: 1.0e-7
+is_samples: [10000, 40000, 160000, 640000]
+dt_values: [1.0e-6, 5.0e-7, 2.5e-7]
+model_b_atoms: 4000
+model_b:
+  U0_K: 1.8e-4
+  w0_m: 5.5e-7
+  zR_m: 9.0e-7
+  rate_s: 72000.0
+  gamma_c_s: 10000.0
+  T_eq_K: 1.0e-5
+  T_init_K: 2.0e-5
+  t_exp_s: 0.08
+  cooled_axes: [1, 1, 1]

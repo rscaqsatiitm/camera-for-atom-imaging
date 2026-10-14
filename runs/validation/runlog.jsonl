@@ -1,0 +1,10 @@
+{"label": "v1_manetsch", "pid": 2398, "n_cpu": 4, "config": "configs/validation/v1_manetsch.yaml", "wall_s": 89.15564647400015, "cpu_s": 169.256009, "cpu_h": 0.04701555805555556, "peak_rss_mb": 1490.13671875}
+{"label": "v2_picken", "pid": 2446, "n_cpu": 4, "config": "configs/validation/v2_picken.yaml", "wall_s": 69.85821772300005, "cpu_s": 97.049227, "cpu_h": 0.026958118611111113, "peak_rss_mb": 1365.75390625}
+{"label": "v1_manetsch", "pid": 2584, "n_cpu": 4, "config": "configs/validation/v1_manetsch.yaml", "wall_s": 66.47748974500018, "cpu_s": 145.96188400000003, "cpu_h": 0.04054496777777779, "peak_rss_mb": 1460.328125}
+{"label": "v2_picken", "pid": 2584, "n_cpu": 4, "config": "configs/validation/v2_picken.yaml", "wall_s": 143.36403721100032, "cpu_s": 242.035672, "cpu_h": 0.06723213111111111, "peak_rss_mb": 1460.328125}
+{"label": "v3_analytic", "pid": 2625, "n_cpu": 4, "config": "configs/validation/v3_analytic.yaml", "wall_s": 190.60174347299971, "cpu_s": 424.949639, "cpu_h": 0.11804156638888888, "peak_rss_mb": 491.2265625}
+{"label": "convergence", "pid": 2807, "n_cpu": 4, "config": "configs/validation/convergence.yaml", "wall_s": 198.97787872699973, "cpu_s": 376.686958, "cpu_h": 0.10463526611111111, "peak_rss_mb": 1891.9296875}
+{"label": "convergence", "pid": 2979, "n_cpu": 4, "config": "configs/validation/convergence.yaml", "wall_s": 179.51720745300008, "cpu_s": 374.19422599999996, "cpu_h": 0.10394284055555554, "peak_rss_mb": 1894.55078125}
+{"label": "v1_manetsch", "pid": 3163, "n_cpu": 4, "config": "configs/validation/v1_manetsch.yaml", "wall_s": 86.6299104890004, "cpu_s": 148.740091, "cpu_h": 0.04131669194444445, "peak_rss_mb": 1293.2890625}
+{"label": "v2_picken", "pid": 3163, "n_cpu": 4, "config": "configs/validation/v2_picken.yaml", "wall_s": 83.85398370599978, "cpu_s": 224.086709, "cpu_h": 0.06224630805555556, "peak_rss_mb": 1412.5546875}
+{"label": "v3_analytic", "pid": 3163, "n_cpu": 4, "config": "configs/validation/v3_analytic.yaml", "wall_s": 66.1933354519997, "cpu_s": 176.61042800000007, "cpu_h": 0.04905845222222224, "peak_rss_mb": 1412.5546875}

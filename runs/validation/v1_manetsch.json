@@ -1,0 +1,244 @@
+{
+ "fitted": {
+  "lambda0_e_per_box": 18.66,
+  "mu_e": 68.74985362216616,
+  "sigma_read_e": 0.1154518026315939,
+  "sigma_note": "fitted to background width"
+ },
+ "fixed": {
+  "qe": 0.44,
+  "eta_cam": 0.027,
+  "t_exp_s": 0.08,
+  "filling": 0.512,
+  "box": 7,
+  "pitch_obj_um": 0.9019607843137254,
+  "frac_in_box": 0.9999246707004447,
+  "L": 0.00013600924883859587,
+  "S": 0.999864,
+  "rate_rel_sd_data": 0.12259822196730716,
+  "adc_gain_placeholder": 0.107
+ },
+ "implied_rate_kcps": 72.3378089458819,
+ "rate_mean_data_kcps": 69.74,
+ "rows": [
+  {
+   "variant": "baseline",
+   "classifier": "box",
+   "threshold": 40.98099999999959,
+   "fp": 4.851055873151734e-06,
+   "fn": 4.910055261406225e-05,
+   "eps": 2.7506798204497918e-05,
+   "fidelity": 0.9999724932017955,
+   "filling": 0.512,
+   "atom_sd": 12.655386515919139
+  },
+  {
+   "variant": "baseline",
+   "classifier": "matched",
+   "threshold": 18.163249999999866,
+   "fp": 1.5803935731599694e-06,
+   "fn": 2.897709944536137e-05,
+   "eps": 1.5607506979727088e-05,
+   "fidelity": 0.9999843924930203,
+   "filling": 0.512,
+   "atom_sd": 10.741498144600166
+  },
+  {
+   "variant": "baseline",
+   "classifier": "bayes",
+   "threshold": -18.089999999973998,
+   "fp": 1.4930005714953813e-06,
+   "fn": 2.7268789056206635e-05,
+   "eps": 1.4690204275667543e-05,
+   "fidelity": 0.9999853097957243,
+   "filling": 0.512,
+   "atom_sd": 32.09618342548819
+  },
+  {
+   "variant": "gaussian_rate",
+   "classifier": "box",
+   "threshold": 40.017999999999596,
+   "fp": 1.0491706421885181e-05,
+   "fn": 5.725844358317138e-05,
+   "eps": 3.4436275848463714e-05,
+   "fidelity": 0.9999655637241516,
+   "filling": 0.512,
+   "atom_sd": 12.626051798886412
+  },
+  {
+   "variant": "no_rate_spread",
+   "classifier": "box",
+   "threshold": 41.729999999999585,
+   "fp": 2.623856347422747e-06,
+   "fn": 4.655941557739296e-05,
+   "eps": 2.51188626731675e-05,
+   "fidelity": 0.9999748811373268,
+   "filling": 0.512,
+   "atom_sd": 9.397558823195302
+  },
+  {
+   "variant": "sigma_0.43_spec",
+   "classifier": "box",
+   "threshold": 42.37199999999923,
+   "fp": 1.70642500807767e-05,
+   "fn": 6.921768762092524e-05,
+   "eps": 4.376681010133276e-05,
+   "fidelity": 0.9999562331898987,
+   "filling": 0.512,
+   "atom_sd": 12.983288529859157
+  },
+  {
+   "variant": "pnr_rounding",
+   "classifier": "box",
+   "threshold": 41.0,
+   "fp": 5.350684864537749e-06,
+   "fn": 4.718175513620909e-05,
+   "eps": 2.676819284363348e-05,
+   "fidelity": 0.9999732318071564,
+   "filling": 0.512,
+   "atom_sd": 12.627733720430701
+  },
+  {
+   "variant": "no_loss",
+   "classifier": "box",
+   "threshold": 41.515999999999586,
+   "fp": 3.1315262882778345e-06,
+   "fn": 4.571386441533754e-06,
+   "eps": 3.868734686744865e-06,
+   "fidelity": 0.9999961312653133,
+   "filling": 0.512,
+   "atom_sd": 12.64736205692228
+  },
+  {
+   "variant": "no_loss",
+   "classifier": "matched",
+   "threshold": 21.480249999999845,
+   "fp": 7.0675212504771744e-09,
+   "fn": 1.1220443186608746e-08,
+   "eps": 9.193817281776539e-09,
+   "fidelity": 0.9999999908061827,
+   "filling": 0.512,
+   "atom_sd": 10.734188644560481
+  },
+  {
+   "variant": "no_loss",
+   "classifier": "bayes",
+   "threshold": -7.409999999968534,
+   "fp": 3.924659144383705e-09,
+   "fn": 6.502711352707294e-09,
+   "eps": 5.244621875045382e-09,
+   "fidelity": 0.9999999947553782,
+   "filling": 0.512,
+   "atom_sd": 32.073265515946105
+  },
+  {
+   "variant": "model_B_thermostat",
+   "classifier": "box",
+   "threshold": 40.98099999999959,
+   "fp": 4.851055873151734e-06,
+   "fn": 5.417456144514105e-05,
+   "eps": 3.0104690726010265e-05,
+   "fidelity": 0.9999698953092739,
+   "filling": 0.512,
+   "atom_sd": 12.656241856174299
+  },
+  {
+   "variant": "model_B_heating",
+   "classifier": "box",
+   "threshold": 40.98099999999959,
+   "fp": 4.851055873151734e-06,
+   "fn": 2.830018175665067e-05,
+   "eps": 1.6857008325503188e-05,
+   "fidelity": 0.9999831429916745,
+   "filling": 0.512,
+   "atom_sd": 12.652635235326066
+  }
+ ],
+ "is_check": {
+  "T": 40.017999999999596,
+  "lattice_fp": 1.0491706421885181e-05,
+  "is_fp": 1.0495054246664629e-05,
+  "is_fp_rel": 0.003769329268655331,
+  "lattice_fn": 5.725844358317138e-05,
+  "is_fn": 5.8358906987438326e-05,
+  "is_fn_rel": 0.008291074578462523,
+  "ess_fp": 59852.25727918484,
+  "ess_fn": 14036.713848300096
+ },
+ "formula_check": {
+  "max_abs_pmf_diff": 4.445362285845911e-07,
+  "fn_cdf_diff_at_T": 1.978287177858134e-06
+ },
+ "model_b": {
+  "thermostat": {
+   "n_lost": 563,
+   "survival": 0.85925,
+   "T_eff_K": 1.1244593404112384e-05,
+   "params": {
+    "U0_K": 0.00018,
+    "w0_m": 5.5e-07,
+    "zR_m": 9e-07,
+    "rate_s": 72000.0,
+    "gamma_c_s": 10000.0,
+    "T_eq_K": 1e-05,
+    "T_init_K": 2e-05,
+    "t_exp_s": 0.08,
+    "dt_s": 5e-07,
+    "cooled_axes": [
+     1,
+     1,
+     1
+    ]
+   }
+  },
+  "heating": {
+   "n_lost": 2014,
+   "survival": 0.4965,
+   "T_eff_K": 3.3694947933669e-05,
+   "params": {
+    "U0_K": 0.00018,
+    "w0_m": 5.5e-07,
+    "zR_m": 9e-07,
+    "rate_s": 7000.0,
+    "gamma_c_s": 0.0,
+    "T_eq_K": 1e-05,
+    "T_init_K": 2e-05,
+    "t_exp_s": 0.08,
+    "dt_s": 5e-07,
+    "cooled_axes": [
+     1,
+     1,
+     1
+    ]
+   }
+  }
+ },
+ "targets": {
+  "fidelity": 0.9999374,
+  "fp": 7.01e-05,
+  "fn": 5.5e-05,
+  "fidelity_no_loss": 0.99999,
+  "fidelity_20ms": 0.999571
+ },
+ "data": {
+  "bg_mean": 18.66,
+  "bg_sd": 4.4,
+  "atom_mean": 87.4,
+  "atom_sd": 13.22,
+  "rate_mean_kcps": 69.74,
+  "rate_sd_kcps": 8.55
+ },
+ "tables": {
+  "fit": "| parameter | value | how obtained |\n|---|---|---|\n| lambda0 (e-, 7x7 box) | 18.7 | fitted: background mean (DATA) |\n| mu (e-, atom present all exposure) | 68.7 | fitted: atom minus background mean (DATA) |\n| sigma_read (e- rms) | 0.115 | fitted to background width |\n| rate distribution | Fig. 4d histogram | DATA (not fitted); Gaussian with rel. sd 0.1226 as variant |\n| loss hazard L | 1.36e-4 | DERIVED: -ln S, S = 0.999864 (SOURCE) |",
+  "predictions": "| variant | classifier | threshold | FP | FN | fidelity | atom sd (e-) |\n|---|---|---|---|---|---|---|\n| baseline | box | 40.98 | 4.85e-6 | 4.91e-5 | 0.9999725 | 12.66 |\n| baseline | matched | 18.16 | 1.58e-6 | 2.90e-5 | 0.9999844 | 10.74 |\n| baseline | bayes | -18.09 | 1.49e-6 | 2.73e-5 | 0.9999853 | - |\n| gaussian_rate | box | 40.02 | 1.05e-5 | 5.73e-5 | 0.9999656 | 12.63 |\n| no_rate_spread | box | 41.73 | 2.62e-6 | 4.66e-5 | 0.9999749 | 9.40 |\n| sigma_0.43_spec | box | 42.37 | 1.71e-5 | 6.92e-5 | 0.9999562 | 12.98 |\n| pnr_rounding | box | 41.00 | 5.35e-6 | 4.72e-5 | 0.9999732 | 12.63 |\n| no_loss | box | 41.52 | 3.13e-6 | 4.57e-6 | 0.9999961 | 12.65 |\n| no_loss | matched | 21.48 | 7.07e-9 | 1.12e-8 | 1.0000000 | 10.73 |\n| no_loss | bayes | -7.41 | 3.92e-9 | 6.50e-9 | 1.0000000 | - |\n| model_B_thermostat | box | 40.98 | 4.85e-6 | 5.42e-5 | 0.9999699 | 12.66 |\n| model_B_heating | box | 40.98 | 4.85e-6 | 2.83e-5 | 0.9999831 | 12.65 |",
+  "residuals": "| quantity | measured (SOURCE) | model (box, baseline) | model/measured |\n|---|---|---|---|\n| FP | 7.01e-5 | 4.85e-6 | 0.0692 |\n| FN | 5.50e-5 | 4.91e-5 | 0.893 |\n| infidelity | 6.26e-5 | 2.75e-5 | 0.439 |\n| fidelity | 0.9999374 | 0.9999725 | - |\n| atom-peak sd (e-, DATA) | 13.2 | 12.7 | 0.957 |\n| scattering rate (kc/s, DATA mean vs implied) | 69.7 | 72.3 | 1.04 |\n| no-loss fidelity | paper (lossy-Poisson fit, loss set to 0) | model (box) |\n|---|---|---|\n|  | 0.99999(1) | 0.999996 |",
+  "is_check": "| Gaussian-rate box, T = 40.02 e- | lattice (SIM) | importance sampling (SIM) | IS rel. error | ESS |\n|---|---|---|---|---|\n| FP | 1.05e-5 | 1.05e-5 | 0.00377 | 5.99e+04 |\n| FN | 5.73e-5 | 5.84e-5 | 0.00829 | 1.4e+04 |",
+  "formula_check": "| check | value |\n|---|---|\n| max |P_paper(n) - P_ours(n)|, pure Poisson | 4.45e-7 |\n| |CDF difference| at threshold | 1.98e-6 |"
+ },
+ "runlog": {
+  "wall_s": 86.6299104890004,
+  "cpu_s": 148.740091,
+  "peak_rss_mb": 1293.2890625,
+  "n_cpu": 4
+ }
+}

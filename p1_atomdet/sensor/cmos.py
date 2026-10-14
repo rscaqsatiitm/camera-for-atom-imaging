@@ -51,7 +51,10 @@ class PixelReadout:
 
 def poisson_support(lam: float, tail: float = 1e-16) -> np.ndarray:
     lam = max(lam, 0.0)
-    hi = int(stats.poisson.isf(tail, lam)) + 2 if lam > 0 else 1
+    q = stats.poisson.isf(tail, lam) if lam > 0 else 0.0
+    if not np.isfinite(q):  # below double precision: generous Chernoff-type bound
+        q = lam + 14 * np.sqrt(lam) + 40
+    hi = int(q) + 2 if lam > 0 else 1
     return np.arange(0, max(hi, 1) + 1)
 
 

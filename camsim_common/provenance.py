@@ -14,7 +14,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, model_validator
 
 
 class Prov(str, Enum):
@@ -37,13 +37,11 @@ class ProvValue(BaseModel):
     pointer: str = ""
     note: str = ""
 
-    @field_validator("pointer")
-    @classmethod
-    def _pointer_required(cls, v: str, info):
-        prov = info.data.get("prov")
-        if prov in (Prov.SOURCE, Prov.USER, Prov.SIM, Prov.DATA, Prov.DERIVED) and not v:
-            raise ValueError(f"provenance {prov} requires a pointer")
-        return v
+    @model_validator(mode="after")
+    def _pointer_required(self):
+        if self.prov != Prov.PLACEHOLDER and not self.pointer:
+            raise ValueError(f"provenance {self.prov.value} requires a pointer")
+        return self
 
     @property
     def is_placeholder(self) -> bool:
