@@ -106,8 +106,8 @@ analytic limits.
    photon budget to {abs(t1['signal_ratio'] - 1) * 100:.0f}% (trap 2 is {(t2['signal_ratio'] - 1) * 100:.0f}% brighter). At the paper's threshold the
    Poisson background gives a readout error {t1['eps_model_at_cmin'] / t1['eps_gauss_paper_eq4']:.1f} and {t2['eps_model_at_cmin'] / t2['eps_gauss_paper_eq4']:.1f} times larger than the paper's Gaussian
    estimate ({fmt(t1['eps_model_at_cmin'])} for trap 1, just above the quoted bound of 8e-7). The SNR table
-   (their Table I) is reproduced cell by cell to {snr_max_ok:.2f} except the EMCCD 852 nm column, which is
-   consistent with QE = 0.55 rather than the stated 0.60.
+   (their Table I) is reproduced cell by cell to {snr_max_ok:.2f} except two cells of the EMCCD 852 nm
+   column (100 and 1000 photons/px), which are consistent with QE = 0.55 rather than the stated 0.60.
 3. **Analytic limits (V3).** Pure Poisson discrimination is reproduced to {fmt(poi_max)} relative error;
    the stage-by-stage EMCCD Monte Carlo reproduces the finite-register excess noise of Basden et al.
    (F^2 = {emc[2]['f2_formula_eq5']:.3f} at gain 1000 and 512 stages, tending to 2); dipole collection, the vectorial PSF and the

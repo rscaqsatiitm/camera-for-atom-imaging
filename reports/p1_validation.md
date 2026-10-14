@@ -27,8 +27,8 @@ analytic limits.
    photon budget to 5% (trap 2 is 32% brighter). At the paper's threshold the
    Poisson background gives a readout error 2.9 and 4.0 times larger than the paper's Gaussian
    estimate (9.55e-7 for trap 1, just above the quoted bound of 8e-7). The SNR table
-   (their Table I) is reproduced cell by cell to 0.05 except the EMCCD 852 nm column, which is
-   consistent with QE = 0.55 rather than the stated 0.60.
+   (their Table I) is reproduced cell by cell to 0.05 except two cells of the EMCCD 852 nm
+   column (100 and 1000 photons/px), which are consistent with QE = 0.55 rather than the stated 0.60.
 3. **Analytic limits (V3).** Pure Poisson discrimination is reproduced to 4.42e-14 relative error;
    the stage-by-stage EMCCD Monte Carlo reproduces the finite-register excess noise of Basden et al.
    (F^2 = 1.972 at gain 1000 and 512 stages, tending to 2); dipole collection, the vectorial PSF and the
