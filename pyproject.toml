@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "camsim"
+version = "0.1.0"
+description = "CAQSAT camera simulators: shared SensorModel schema (camsim_common) and P1 single-atom detection model"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "numba>=0.59",
+    "h5py>=3.9",
+    "pyyaml>=6",
+    "pydantic>=2.5",
+    "matplotlib>=3.8",
+    "psutil>=5.9",
+]
+
+[project.optional-dependencies]
+sweep = ["SALib>=1.4"]
+test = ["pytest>=7"]
+
+[tool.setuptools.packages.find]
+include = ["camsim_common*", "p1_atomdet*"]
+
+[tool.setuptools.package-data]
+camsim_common = ["presets/*.yaml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+markers = ["slow: long-running tests (deselect with -m 'not slow')"]
