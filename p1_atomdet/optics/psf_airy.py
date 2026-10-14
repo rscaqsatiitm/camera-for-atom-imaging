@@ -6,12 +6,12 @@ from scipy import optimize, special
 
 
 def psf_airy(r_m, wavelength_m: float, na: float):
-    """Normalised Airy PSF (1/m^2): (k NA)^2/(2 pi) [2 J1(v)/v]^2, v = k NA r."""
+    """Normalised Airy PSF (1/m^2): (k NA)^2/(4 pi) [2 J1(v)/v]^2, v = k NA r (int J1^2/v dv = 1/2)."""
     k = 2 * np.pi / wavelength_m
     v = k * na * np.asarray(r_m, float)
     with np.errstate(invalid="ignore", divide="ignore"):
         a = np.where(v == 0, 1.0, 2 * special.j1(v) / np.where(v == 0, 1.0, v))
-    return (k * na) ** 2 / (2 * np.pi) * a**2
+    return (k * na) ** 2 / (4 * np.pi) * a**2
 
 
 def psf_gaussian(r_m, waist_m: float):

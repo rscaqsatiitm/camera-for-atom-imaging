@@ -10,12 +10,14 @@ Conditional on the common variables (loss time tau, rate multiplier m, neighbour
 pixel outputs are independent, so P(S | common) is the convolution of per-pixel score
 distributions. The common variables are then mixed with their quadrature weights:
 
-  P(S | atom)    = sum_{tau, m, nb} w_tau w_m w_nb  conv_i P(g_i(x_i) | lam_i = b_i + f_i mu m tau + nb_i)
+  P(S | atom)    = sum_{s, nb} w_s w_nb  conv_i P(g_i(x_i) | lam_i = b_i + f_i mu s + nb_i),   s = tau * m
   P(S | no atom) = sum_{nb}         w_nb            conv_i P(g_i(x_i) | lam_i = b_i + nb_i)
 
-All errors of this construction are controlled by four numerical parameters, each covered
-by the convergence study: tau nodes, rate nodes, the statistic lattice step h_stat and the
-Poisson/Gaussian truncation (1e-16 per pixel).
+Loss time tau and rate multiplier m enter only through their product s, so the mixture is
+taken over a uniform grid in s (SiteModel.signal_multiplier_nodes). All errors of this
+construction are controlled by numerical parameters covered by the convergence study:
+tau nodes, the s-grid step ds, the statistic lattice step h_stat and the Poisson/Gaussian
+truncation (1e-16 per pixel).
 """
 from __future__ import annotations
 
@@ -36,11 +38,16 @@ class SiteModel:
     mu: float                             # detected electrons if present for the whole exposure (all pixels, before frac)
     bg: np.ndarray                        # (box, box) background electrons per pixel (stray + dark)
     tau: TauDistribution = field(default_factory=TauDistribution.no_loss)
-    rate_rel_sd: float = 0.0              # relative rms of mu between shots/sites (Gaussian, truncated at 0)
-    n_rate_nodes: int = 9
+    rate_rel_sd: float = 0.0              # relative rms of mu between shots/sites (Gaussian; m < 0 mapped to 0)
+    n_rate_nodes: int = 9                 # only for quadrature="tensor" (Gauss-Hermite, test use)
     neighbours: list = field(default_factory=list)   # list of (box, box) fraction arrays of neighbour atoms
     neighbour_filling: float = 0.5
     class_map: np.ndarray | None = None   # per-pixel read-noise class (None: ensemble mixture)
+    quadrature: str = "s_grid"            # s_grid (default) | tensor
+    ds: float = 0.01                      # step of the signal-multiplier grid s = tau * m
+    x_range: float = 8.5                  # rate distribution integrated over |x| <= x_range sigma
+    rate_hist: tuple | None = None        # empirical rate law: (bin centres m_k, weights w_k), uniform within bins;
+                                          # overrides rate_rel_sd when given (m normalised to mean 1)
 
     def rate_nodes(self):
         if self.rate_rel_sd <= 0:
@@ -50,6 +57,51 @@ class SiteModel:
         m = 1.0 + self.rate_rel_sd * x
         m = np.clip(m, 0.0, None)
         return m, w
+
+    def signal_multiplier_nodes(self):
+        """(s, weight) for the atom signal multiplier s = tau * m, the only way (tau, m) enter.
+
+        tensor : Gauss-Hermite in m x tau nodes (fast but inaccurate for tail-dominated FN).
+        s_grid : the joint law of s deposited on a uniform grid of step ds by linear (CIC) splitting,
+                 with m integrated on a fine x grid (x_range sigma, 4000 points) for every tau node.
+                 Mean-preserving; error O(ds^2), covered by the convergence study.
+        """
+        taus, wt = self.tau.all_nodes()
+        keep = wt > 0
+        taus, wt = taus[keep], wt[keep]
+        if self.quadrature == "tensor":
+            ms, wm = self.rate_nodes()
+            return (taus[:, None] * ms[None, :]).ravel(), (wt[:, None] * wm[None, :]).ravel()
+        if self.rate_hist is not None:
+            c, w = (np.asarray(a, float) for a in self.rate_hist)
+            w = w / w.sum()
+            c = c / np.sum(c * w)
+            half = 0.5 * np.median(np.diff(c))
+            sub = (np.arange(40) + 0.5) / 40 * 2 - 1
+            m = (c[:, None] + half * sub[None, :]).ravel()
+            pm = np.repeat(w / 40, 40)
+            vals = (taus[:, None] * m[None, :]).ravel()
+            wts = (wt[:, None] * pm[None, :]).ravel()
+        elif self.rate_rel_sd <= 0:
+            vals, wts = taus, wt
+        else:
+            x = np.linspace(-self.x_range, self.x_range, 4001)
+            px = np.exp(-0.5 * x**2)
+            px /= px.sum()
+            m = np.clip(1.0 + self.rate_rel_sd * x, 0.0, None)
+            vals = (taus[:, None] * m[None, :]).ravel()
+            wts = (wt[:, None] * px[None, :]).ravel()
+        h = self.ds
+        n = int(np.floor(vals.max() / h)) + 2
+        u = vals / h
+        i = np.floor(u + 1e-12).astype(int)
+        f = np.clip(u - i, 0.0, 1.0)
+        f[f < 1e-9] = 0.0
+        grid = np.zeros(n + 1)
+        np.add.at(grid, i, wts * (1 - f))
+        np.add.at(grid, i + 1, wts * f)
+        nz = np.nonzero(grid > 1e-20)[0]  # drops < 1e-18 total mass
+        return nz * h, grid[nz]
 
     def neighbour_configs(self):
         """(extra light per pixel in units of mu, weight) for every occupancy configuration."""
@@ -117,8 +169,7 @@ def _default_h(readout, clf: Classifier) -> float:
     return step * float(np.max(clf.weights)) / 4.0
 
 
-def site_statistic(site: SiteModel, readout, clf: Classifier, present: bool,
-                   n_tau_max: int | None = None) -> Lattice:
+def site_statistic(site: SiteModel, readout, clf: Classifier, present: bool) -> Lattice:
     """Distribution of the statistic S for a site with (present=True) or without an atom."""
     h = clf.h_stat or _default_h(readout, clf)
     npx = site.frac.size
@@ -140,16 +191,10 @@ def site_statistic(site: SiteModel, readout, clf: Classifier, present: bool,
             comps.append(one(nb_signal))
             weights.append(w_nb)
             continue
-        taus, wt = site.tau.all_nodes()
-        if n_tau_max is not None and taus.size > n_tau_max:
-            raise ValueError("too many tau nodes")
-        ms, wm = site.rate_nodes()
-        for t, a in zip(taus, wt):
-            if a <= 0:
-                continue
-            for m, b in zip(ms, wm):
-                comps.append(one(nb_signal + site.mu * m * t * site.frac))
-                weights.append(w_nb * a * b)
+        svals, sw = site.signal_multiplier_nodes()
+        for sv, a in zip(svals, sw):
+            comps.append(one(nb_signal + site.mu * sv * site.frac))
+            weights.append(w_nb * a)
     return mixture(comps, weights)
 
 

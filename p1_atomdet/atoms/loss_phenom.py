@@ -27,6 +27,7 @@ class TauDistribution:
     nodes: np.ndarray
     weights: np.ndarray
     label: str = ""
+    hazard: float | None = None   # set for model A; lets Monte Carlo sample the exact density
 
     def __post_init__(self):
         self.nodes = np.asarray(self.nodes, float)
@@ -61,7 +62,31 @@ class TauDistribution:
         wt = 0.5 * w * L * np.exp(-L * tau)
         S = np.exp(-L)
         wt *= (1.0 - S) / wt.sum()  # remove the O(1e-16) quadrature error so weights sum exactly
-        return cls(S, tau, wt, f"hazard L={L:.3e}")
+        return cls(S, tau, wt, f"hazard L={L:.3e}", hazard=L)
+
+    def sample(self, rng: np.random.Generator, n: int) -> np.ndarray:
+        """Draw tau (1.0 for survivors). Exact truncated exponential if `hazard` is set, else nodes."""
+        u = rng.random(n)
+        out = np.ones(n)
+        lost = u >= self.p_survive
+        k = int(lost.sum())
+        if k == 0:
+            return out
+        if self.hazard is not None:
+            L = self.hazard
+            v = rng.random(k)
+            out[lost] = -np.log1p(-v * (1 - np.exp(-L))) / L
+        else:
+            out[lost] = rng.choice(self.nodes, size=k, p=self.weights / self.weights.sum())
+        return out
+
+    @classmethod
+    def with_shape(cls, centres: np.ndarray, density: np.ndarray, survival: float, label: str = "shape"):
+        """Loss-time shape (e.g. from model B) rescaled to a prescribed survival probability."""
+        d = np.asarray(density, float)
+        m = d > 0
+        w = d[m] / d[m].sum() * (1.0 - survival)
+        return cls(survival, np.asarray(centres, float)[m], w, label)
 
     @classmethod
     def from_samples(cls, tau_samples: np.ndarray, n_bins: int = 64, label: str = "samples"):

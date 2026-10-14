@@ -1,0 +1,42 @@
+# V2: reproduce Picken, Legaie & Pritchard, arXiv:1709.00946v2 (Cs, Andor Zyla 5.5, 40 ms).
+name: v2_picken
+seed: 2002
+sensor_preset: camsim_common/presets/zyla55_picken_globalshutter_200MHz.yaml
+
+fixed:
+  qe:        {value: 0.22, unit: "", prov: SOURCE, pointer: "arXiv:1709.00946v2 Sec. II: QE = 22% at 852 nm"}
+  sigma_read_e: {value: 2.2, unit: e- rms, prov: SOURCE, pointer: "arXiv:1709.00946v2 Sec. II: 2.2 e- rms, global shutter, 200 MHz"}
+  t_exp_s:   {value: 0.040, unit: s, prov: SOURCE, pointer: "arXiv:1709.00946v2 Sec. IV: 40 ms exposure"}
+  eta_det:   {value: 0.035, unit: "", prov: SOURCE, pointer: "arXiv:1709.00946v2 Sec. IV: combined detection efficiency including filters 3.5% (excludes QE)"}
+  eta_collection: {value: 0.054, unit: "", prov: SOURCE, pointer: "arXiv:1709.00946v2 Sec. III: collection efficiency ~5.4%"}
+  eta_ito:   {value: 0.79, unit: "", prov: SOURCE, pointer: "arXiv:1709.00946v2 Sec. III: ITO transmission 79%"}
+  eta_filters: {value: 0.83, unit: "", prov: SOURCE, pointer: "arXiv:1709.00946v2 Sec. IV: measured filter transmission 83%"}
+  rate_s:    {value: 450000.0, unit: s^-1, prov: SOURCE, pointer: "arXiv:1709.00946v2 Sec. IV: effective scattering rate 450 photons/ms"}
+  incident_rate_s: {value: 15000.0, unit: s^-1, prov: SOURCE, pointer: "arXiv:1709.00946v2 Sec. IV: expected flux 15 photons/ms on the camera"}
+  box_px:    {value: 3, unit: px, prov: SOURCE, pointer: "arXiv:1709.00946v2 Sec. IV: 3x3 pixel region of interest"}
+  pixel_obj_um: {value: 1.0, unit: um, prov: SOURCE, pointer: "arXiv:1709.00946v2 Sec. IV: effective pixel size 1 um"}
+  psf_um:    {value: 0.7, unit: um, prov: SOURCE, pointer: "arXiv:1709.00946v2 Sec. IV: PSF 0.7 +- 0.1 um (USAF chart); treated as Gaussian FWHM"}
+  vacuum_lifetime_s: {value: 6.0, unit: s, prov: SOURCE, pointer: "arXiv:1709.00946v2 Sec. IV: 1/e lifetime exceeding 6 s (lower bound)"}
+
+data:   # Table II and Sec. IV of arXiv:1709.00946v2 (counts are camera counts, offset assumed subtracted)
+  trap1: {mu0: 206, sigma0: 29, mu1: 586, sigma1: 51, p1: 0.52, cmin: 346}
+  trap2: {mu0: 191, sigma0: 29, mu1: 685, sigma1: 67, p1: 0.57, cmin: 345}
+  data_prov: {value: "Table II", unit: "", prov: SOURCE, pointer: "arXiv:1709.00946v2 Table II (mu, sigma, p1) and Sec. IV (cmin = 346, 345)"}
+
+targets:
+  readout_error: {value: 8.0e-7, unit: "", prov: SOURCE, pointer: "arXiv:1709.00946v2 Sec. IV: epsilon < 8e-7 (Gaussian-fit estimate, Eq. 4)"}
+  acceptance:    {value: 0.9999, unit: "", prov: SOURCE, pointer: "arXiv:1709.00946v2 Sec. IV: A > 99.99%"}
+  retention:     {value: 0.99, unit: "", prov: SOURCE, pointer: "arXiv:1709.00946v2 Sec. IV: single-shot retention > 99%"}
+
+# Table I of arXiv:1709.00946v2: SNR from Eq. (1) with n_b = 0 (SOURCE, Table I and caption).
+snr_table:
+  levels: [10, 100, 1000]
+  detectors:
+    Zyla:  {qe_best: 0.60, qe_852: 0.22, read_e: 2.2, M: 1, F2: 1, best: [1.8, 7.4, 24.4], at852: [0.8, 4.2, 14.7]}
+    EMCCD: {qe_best: 0.90, qe_852: 0.60, read_e: 89.0, M: 1000, F2: 2, best: [2.1, 6.7, 21.2], at852: [1.7, 5.2, 16.6]}
+    CCD:   {qe_best: 0.70, qe_852: 0.20, read_e: 10.0, M: 1, F2: 1, best: [0.7, 5.4, 24.7], at852: [0.2, 1.8, 11.5]}
+
+numerics:
+  n_tau: 48
+  ds: 0.01
+  supersample: 8

@@ -1,0 +1,152 @@
+schema_version: '1.0'
+name: orca_quest_c15550_20up_manetsch
+camera: Hamamatsu ORCA-Quest C15550-20UP
+mode: as used by Manetsch et al. (scan mode not stated)
+sensor_type: qCMOS
+notes: Validation preset V1. Output treated in photoelectron units, as in the paper's histograms.
+qe:
+  wavelength_nm:
+  - 852.35
+  temperature_K:
+  - 293.15
+  values:
+  - - 0.44
+  prov:
+    value: single point
+    unit: ''
+    prov: SOURCE
+    pointer: 'Manetsch et al., arXiv:2403.12021v4, Methods ''Single-atom imaging'': ''44% are detected on the sensor
+      due to the quantum efficiency at 852 nm'''
+    note: ''
+qe_780:
+  value: null
+  unit: ''
+  prov: PLACEHOLDER
+  pointer: ''
+  note: not used in V1
+qe_852:
+  value: 0.44
+  unit: ''
+  prov: SOURCE
+  pointer: Manetsch et al., arXiv:2403.12021v4, Methods 'Single-atom imaging'
+  note: ''
+prnu:
+  value: 0.0
+  unit: ''
+  prov: PLACEHOLDER
+  pointer: ''
+  note: not stated; effect on V1 tested in the sensitivity table
+read_noise:
+  kind: gaussian
+  sigma_e:
+    value: 0.43
+    unit: e- rms
+    prov: PLACEHOLDER
+    pointer: ''
+    note: ORCA-Quest 2 standard-scan value from USER table; C15550-20UP value not retrieved
+read_noise_median_e:
+  value: 0.43
+  unit: e-
+  prov: PLACEHOLDER
+  pointer: ''
+  note: as sigma
+read_noise_rms_e:
+  value: 0.43
+  unit: e-
+  prov: PLACEHOLDER
+  pointer: ''
+  note: as sigma
+adc:
+  gain_e_per_adu:
+    value: 0.107
+    unit: e-/ADU
+    prov: PLACEHOLDER
+    pointer: ''
+    note: recalled; V1 works in photoelectrons, quantisation step < 0.25 sigma
+  adc_bits:
+    value: 16
+    unit: bit
+    prov: PLACEHOLDER
+    pointer: ''
+    note: recalled
+  full_well_e:
+    value: 7000
+    unit: e-
+    prov: PLACEHOLDER
+    pointer: ''
+    note: recalled; V1 pixel signals < 20 e-
+  offset_adu:
+    value: 200
+    unit: ADU
+    prov: PLACEHOLDER
+    pointer: ''
+    note: recalled
+dark:
+  D_ref:
+    value: 0.016
+    unit: e-/px/s
+    prov: PLACEHOLDER
+    pointer: ''
+    note: recalled; dark over 49 px x 80 ms < 0.07 e-
+  T_ref_K:
+    value: 238.15
+    unit: K
+    prov: PLACEHOLDER
+    pointer: ''
+    note: recalled cooling set point
+  Ea_eV:
+    value: 0.6
+    unit: eV
+    prov: PLACEHOLDER
+    pointer: ''
+    note: generic Si; P4 to supply
+  T_op_K:
+    value: 238.15
+    unit: K
+    prov: PLACEHOLDER
+    pointer: ''
+    note: recalled
+emccd: null
+pixel_pitch_um:
+  value: 4.6
+  unit: um
+  prov: DERIVED
+  pointer: 'Manetsch et al., arXiv:2403.12021v4, Methods ''Single-atom imaging'': PSF waist 7.8 um on camera = 1.7
+    px -> 4.59 um/px; USER table lists 4.6 um for ORCA-Quest 2'
+  note: ''
+mtf: null
+shutter:
+  type: rolling
+  line_time_us:
+    value: 7.2
+    unit: us
+    prov: PLACEHOLDER
+    pointer: ''
+    note: recalled; irrelevant for 80 ms continuous imaging
+  frame_time_ms:
+    value: 80.0
+    unit: ms
+    prov: PLACEHOLDER
+    pointer: ''
+    note: set by the experiment
+  n_rows: 2304
+cosmic:
+  rate_per_cm2_s:
+    value: 0.0167
+    unit: cm^-2 s^-1
+    prov: PLACEHOLDER
+    pointer: ''
+    note: sea-level muon flux ~1 cm^-2 min^-1, recalled; retrieve PDG value
+  deposit_e_per_um:
+    value: 80
+    unit: e-/um
+    prov: PLACEHOLDER
+    pointer: ''
+    note: minimum-ionising deposit in Si, recalled
+  thickness_um:
+    value: 10.0
+    unit: um
+    prov: PLACEHOLDER
+    pointer: ''
+    note: sensitive thickness not stated in a retrieved source
+qcmos_pnr: false

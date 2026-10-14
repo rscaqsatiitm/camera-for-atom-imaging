@@ -1,0 +1,15 @@
+# V3: analytic limits (all inputs are test values chosen to span the regime; no physical provenance needed).
+name: v3_analytic
+seed: 3003
+# (mu, B, T, box): detected atom electrons, background electrons in the box, threshold, box size
+poisson_cases:
+  - [10.0, 0.0, 1, 1]
+  - [10.0, 0.5, 3, 3]
+  - [30.0, 2.0, 9, 5]
+  - [70.0, 18.0, 40, 7]
+emccd:
+  gains: [10, 100, 1000, 3000]
+  n_stages: 512
+  lambda_in: 5.0
+  mc_samples: 200000
+psf_na: [0.1, 0.3, 0.5, 0.8]

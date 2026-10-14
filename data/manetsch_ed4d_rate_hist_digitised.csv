@@ -1,0 +1,17 @@
+# Manetsch et al. arXiv:2403.12021v4 Ext. Data Fig. 4d (histogram of per-site scattering rate).
+# Digitised 2026-10-14 from a 400 dpi render: bar heights in pixels (1 px ~ 4 sites), bin centres from bar edges.
+# Axis calibration: x ticks 60 and 80 kc/s. Smallest bars (3 px, 10 px) carry ~+-1 px uncertainty.
+rate_kcps,height_px,weight
+48.77,3,0.00106
+52.25,32,0.01134
+55.76,142,0.05030
+59.32,308,0.10910
+62.85,422,0.14949
+66.39,398,0.14098
+69.95,355,0.12575
+73.46,336,0.11902
+76.96,330,0.11690
+80.52,270,0.09564
+84.08,160,0.05668
+87.62,57,0.02019
+91.18,10,0.00354

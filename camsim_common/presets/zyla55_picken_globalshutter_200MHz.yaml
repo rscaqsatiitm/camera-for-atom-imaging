@@ -1,0 +1,151 @@
+schema_version: '1.0'
+name: zyla55_picken_globalshutter_200MHz
+camera: Andor Zyla 5.5 sCMOS
+mode: global shutter, 200 MHz
+sensor_type: sCMOS
+notes: Validation preset V2. ADC gain is not stated by Picken et al.; it is fitted in V2.
+qe:
+  wavelength_nm:
+  - 852.0
+  temperature_K:
+  - 293.15
+  values:
+  - - 0.22
+  prov:
+    value: single point
+    unit: ''
+    prov: SOURCE
+    pointer: 'Picken et al., arXiv:1709.00946v2, Sec. II: ''At our imaging wavelength, 852 nm, QE = 22 %'''
+    note: ''
+qe_780:
+  value: null
+  unit: ''
+  prov: PLACEHOLDER
+  pointer: ''
+  note: not used in V2
+qe_852:
+  value: 0.22
+  unit: ''
+  prov: SOURCE
+  pointer: Picken et al., arXiv:1709.00946v2, Sec. II
+  note: ''
+prnu:
+  value: 0.0
+  unit: ''
+  prov: PLACEHOLDER
+  pointer: ''
+  note: not stated
+read_noise:
+  kind: gaussian
+  sigma_e:
+    value: 2.2
+    unit: e- rms
+    prov: SOURCE
+    pointer: 'Picken et al., arXiv:1709.00946v2, Sec. II: ''global shutter mode with 200 MHz readout speed, delta_ro
+      = 2.2 e- rms'''
+    note: ''
+read_noise_median_e:
+  value: 2.2
+  unit: e-
+  prov: PLACEHOLDER
+  pointer: ''
+  note: paper gives rms only; Gaussian assumed
+read_noise_rms_e:
+  value: 2.2
+  unit: e-
+  prov: SOURCE
+  pointer: Picken et al., arXiv:1709.00946v2, Sec. II
+  note: ''
+adc:
+  gain_e_per_adu:
+    value: 0.38
+    unit: e-/ADU
+    prov: PLACEHOLDER
+    pointer: ''
+    note: fitted in V2 from the background histogram
+  adc_bits:
+    value: 16
+    unit: bit
+    prov: PLACEHOLDER
+    pointer: ''
+    note: recalled
+  full_well_e:
+    value: 30000
+    unit: e-
+    prov: PLACEHOLDER
+    pointer: ''
+    note: recalled
+  offset_adu:
+    value: 100
+    unit: ADU
+    prov: PLACEHOLDER
+    pointer: ''
+    note: recalled
+dark:
+  D_ref:
+    value: 0.1
+    unit: e-/px/s
+    prov: PLACEHOLDER
+    pointer: ''
+    note: recalled; neglected by Picken et al. Sec. II
+  T_ref_K:
+    value: 273.15
+    unit: K
+    prov: PLACEHOLDER
+    pointer: ''
+    note: ''
+  Ea_eV:
+    value: 0.6
+    unit: eV
+    prov: PLACEHOLDER
+    pointer: ''
+    note: ''
+  T_op_K:
+    value: 273.15
+    unit: K
+    prov: PLACEHOLDER
+    pointer: ''
+    note: ''
+emccd: null
+pixel_pitch_um:
+  value: 6.5
+  unit: um
+  prov: PLACEHOLDER
+  pointer: ''
+  note: recalled; object-plane pixel 1 um is SOURCE
+mtf: null
+shutter:
+  type: global
+  line_time_us:
+    value: 9.24
+    unit: us
+    prov: PLACEHOLDER
+    pointer: ''
+    note: recalled
+  frame_time_ms:
+    value: 40.0
+    unit: ms
+    prov: PLACEHOLDER
+    pointer: ''
+    note: ''
+  n_rows: 2160
+cosmic:
+  rate_per_cm2_s:
+    value: 0.0167
+    unit: cm^-2 s^-1
+    prov: PLACEHOLDER
+    pointer: ''
+    note: sea-level muon flux ~1 cm^-2 min^-1, recalled; retrieve PDG value
+  deposit_e_per_um:
+    value: 80
+    unit: e-/um
+    prov: PLACEHOLDER
+    pointer: ''
+    note: minimum-ionising deposit in Si, recalled
+  thickness_um:
+    value: 10.0
+    unit: um
+    prov: PLACEHOLDER
+    pointer: ''
+    note: sensitive thickness not stated in a retrieved source
+qcmos_pnr: false

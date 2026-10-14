@@ -242,15 +242,15 @@ class SensorModel(_Base):
 
     # --- IO
     def to_yaml(self, path: str | Path | None = None) -> str:
-        text = yaml.safe_dump(self.model_dump(mode="json", exclude_none=True), sort_keys=False, width=110)
+        text = yaml.safe_dump(self.model_dump(mode="json"), sort_keys=False, width=110)
         if path is not None:
             Path(path).write_text(text)
         return text
 
     @classmethod
     def from_yaml(cls, path_or_text: str | Path) -> "SensorModel":
-        p = Path(str(path_or_text))
-        text = p.read_text() if (len(str(path_or_text)) < 4096 and p.exists()) else str(path_or_text)
+        s = str(path_or_text)
+        text = Path(s).read_text() if ("\n" not in s and Path(s).exists()) else s
         return cls.model_validate(yaml.safe_load(text))
 
     def walk_values(self):

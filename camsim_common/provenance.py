@@ -31,7 +31,7 @@ class ProvValue(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    value: Any
+    value: Any = None
     unit: str = ""
     prov: Prov
     pointer: str = ""
