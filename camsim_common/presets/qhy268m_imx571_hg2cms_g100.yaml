@@ -1,7 +1,7 @@
 schema_version: '1.0'
-name: qhy268m_imx571_hg2cms
+name: qhy268m_imx571_hg2cms_g100
 camera: QHYCCD QHY268M (Sony IMX571 mono)
-mode: High Gain-2CMS, gain 56
+mode: High Gain-2CMS, gain 100
 sensor_type: CMOS
 notes: ''
 qe:
@@ -43,31 +43,33 @@ prnu:
 read_noise:
   kind: gaussian
   sigma_e:
-    value: 1.58
+    value: 1.19
     unit: e-
-    prov: SOURCE
-    pointer: 'SOURCE qhyccd.com/astronomical-camera-qhy268/ (modified 2026-06-16): read-noise chart label 1.58 e-
-      (High Gain-2CMS, gain 56)'
+    prov: DATA
+    pointer: 'DATA digitised from SOURCE qhyccd.com/astronomical-camera-qhy268/ (modified 2026-06-16) mode charts
+      (High Gain Mode 2CMS curve, gain 100; calibration check at the labelled gain-56 point: read noise 1.59 vs
+      1.58, system gain 0.449 vs 0.44, full well 29490 vs 28528): 1.19 +- 0.05 e- at gain 100'
     note: ''
 read_noise_median_e:
-  value: 1.58
+  value: 1.19
   unit: e-
   prov: PLACEHOLDER
   pointer: ''
-  note: statistic not stated
+  note: statistic not stated by QHY
 read_noise_rms_e:
-  value: 1.58
+  value: 1.19
   unit: e-
   prov: PLACEHOLDER
   pointer: ''
   note: ''
 adc:
   gain_e_per_adu:
-    value: 0.44
+    value: 0.006
     unit: e-/ADU
-    prov: SOURCE
-    pointer: 'SOURCE qhyccd.com/astronomical-camera-qhy268/ (modified 2026-06-16): system-gain chart 0.44 e-/ADU
-      (HG, gain 56)'
+    prov: DATA
+    pointer: 'DATA digitised from SOURCE qhyccd.com/astronomical-camera-qhy268/ (modified 2026-06-16) mode charts
+      (High Gain Mode 2CMS curve, gain 100; calibration check at the labelled gain-56 point: read noise 1.59 vs
+      1.58, system gain 0.449 vs 0.44, full well 29490 vs 28528): ~0.006, below chart resolution (+-0.01)'
     note: ''
   adc_bits:
     value: 16
@@ -76,10 +78,12 @@ adc:
     pointer: SOURCE qhyccd.com/astronomical-camera-qhy268/ (modified 2026-06-16)
     note: ''
   full_well_e:
-    value: 28528
+    value: 390
     unit: e-
-    prov: SOURCE
-    pointer: 'SOURCE qhyccd.com/astronomical-camera-qhy268/ (modified 2026-06-16): full-well chart, HG gain 56'
+    prov: DATA
+    pointer: 'DATA digitised from SOURCE qhyccd.com/astronomical-camera-qhy268/ (modified 2026-06-16) mode charts
+      (High Gain Mode 2CMS curve, gain 100; calibration check at the labelled gain-56 point: read noise 1.59 vs
+      1.58, system gain 0.449 vs 0.44, full well 29490 vs 28528): ~390 e- (consistent with 65535 ADU x 0.006 e-/ADU)'
     note: ''
   offset_adu:
     value: 100

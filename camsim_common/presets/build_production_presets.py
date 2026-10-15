@@ -210,15 +210,18 @@ def presets():
         shutter=ShutterBlock(type="rolling", line_time_us=pv(11.4, "us", "DERIVED", f"{MAR}: 43 fps full frame (12-bit, USB) / 2046 rows"),
                              frame_time_ms=pv(23.26, "ms", "USER", f"{MAR}: 43 fps"), n_rows=2046),
         cosmic=cosmic(10.0)))
-    # ---------------- Sony IMX571 cooled astro camera (QHY268M), high-gain mode with 2x CMS
+    # ---------------- Sony IMX571 cooled astro camera (QHY268M), high-gain mode with 2x CMS at gain 100 (PI choice)
+    QHYCH = (f"DATA digitised from {QHY} mode charts (High Gain Mode 2CMS curve, gain 100; calibration check at the "
+             "labelled gain-56 point: read noise 1.59 vs 1.58, system gain 0.449 vs 0.44, full well 29490 vs 28528)")
     out.append(common(
-        "qhy268m_imx571_hg2cms", "QHYCCD QHY268M (Sony IMX571 mono)", "High Gain-2CMS, gain 56", "CMOS",
+        "qhy268m_imx571_hg2cms_g100", "QHYCCD QHY268M (Sony IMX571 mono)", "High Gain-2CMS, gain 100", "CMOS",
         qe=qe_tab(0.314, 0.208, QHYQE), qe_780=pv(0.314, "", "DATA", QHYQE), qe_852=pv(0.208, "", "DATA", QHYQE),
         prnu=placeholder(0.005, "", "not stated"),
-        read_noise=GaussianCore(sigma_e=pv(1.58, "e-", "SOURCE", f"{QHY}: read-noise chart label 1.58 e- (High Gain-2CMS, gain 56)")),
-        read_noise_median_e=placeholder(1.58, "e-", "statistic not stated"), read_noise_rms_e=placeholder(1.58, "e-", ""),
-        adc=ADCBlock(gain_e_per_adu=pv(0.44, "e-/ADU", "SOURCE", f"{QHY}: system-gain chart 0.44 e-/ADU (HG, gain 56)"),
-                     adc_bits=pv(16, "bit", "SOURCE", f"{QHY}"), full_well_e=pv(28528, "e-", "SOURCE", f"{QHY}: full-well chart, HG gain 56"),
+        read_noise=GaussianCore(sigma_e=pv(1.19, "e-", "DATA", f"{QHYCH}: 1.19 +- 0.05 e- at gain 100")),
+        read_noise_median_e=placeholder(1.19, "e-", "statistic not stated by QHY"), read_noise_rms_e=placeholder(1.19, "e-", ""),
+        adc=ADCBlock(gain_e_per_adu=pv(0.006, "e-/ADU", "DATA", f"{QHYCH}: ~0.006, below chart resolution (+-0.01)"),
+                     adc_bits=pv(16, "bit", "SOURCE", f"{QHY}"),
+                     full_well_e=pv(390, "e-", "DATA", f"{QHYCH}: ~390 e- (consistent with 65535 ADU x 0.006 e-/ADU)"),
                      offset_adu=placeholder(100, "ADU", "")),
         dark=dark(0.0005, -20, -20, f"{QHY}: 0.0005 e-/px/s at -20 C", ea_two_point(0.0005, -20 + C2K, 0.001, -10 + C2K),
                   "two-point fit 0.0005 @ -20 C and 0.001 @ -10 C (QHY268 spec table)"),
