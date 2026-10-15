@@ -9,3 +9,5 @@ runs/production/prod_sensitivity/prod_sensitivity.h5
 /usr/lib/python3.13/multiprocessing/resource_tracker.py:479: UserWarning: resource_tracker: There appear to be 6 leaked semaphore objects to clean up at shutdown: {'/mp-bwwh_n3c', '/mp-qox3ppwp', '/mp-ly4sqqas', '/mp-4b8gtgbh', '/mp-znm9avhi', '/mp-0wcrhrtc'}
   warnings.warn(
 2026-10-15T15:32 sobol prefix 2560: 685 points left
+{'n_points': 10240, 'evaluated': 685, 'remaining': 7680}
+2026-10-15T16:53 sobol prefix 2560 done

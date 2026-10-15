@@ -311,20 +311,26 @@ def sobol_table(res):
     return md_table(["parameter (ranked by S_T for 1e-4)", "S1, t(1e-4)", "S_T, t(1e-4)", "S1, t(1e-3)", "S_T, t(1e-3)"], rows)
 
 
-def fig_sobol(res, out):
+def fig_sobol(res, out, title=None):
+    """S_T and S1 (95% bootstrap CIs) for log10 t(1e-4) and log10 t(1e-3), parameters ranked by S_T at 1e-4."""
     names = [r["param"] for r in res["1e-04"]["indices"]]
-    by = {r["param"]: r for r in res["1e-04"]["indices"]}
-    fig, (ax,) = _fig(w=7.0, h=3.8)
+    fig, axes = _fig(w=9.0, h=3.8, n=2)
     y = np.arange(len(names))
-    s1 = np.array([by[n]["S1"] for n in names]); s1c = np.array([by[n]["S1_conf"] for n in names])
-    st = np.array([by[n]["ST"] for n in names]); stc = np.array([by[n]["ST_conf"] for n in names])
-    ax.barh(y - 0.18, st, 0.34, xerr=stc, color=C[0], label="total index S_T", error_kw=dict(ecolor=INK2, lw=1))
-    ax.barh(y + 0.18, s1, 0.34, xerr=s1c, color=C[1], label="first-order index S1", error_kw=dict(ecolor=INK2, lw=1))
-    ax.set_yticks(y)
-    ax.set_yticklabels(names, fontsize=8)
-    ax.invert_yaxis()
-    ax.set_xlabel("Sobol index of log10 t(1e-4)", color=INK, fontsize=9)
-    ax.legend(frameon=False, fontsize=8, loc="lower right")
+    for ax, tg in zip(axes, ("1e-04", "1e-03")):
+        by = {r["param"]: r for r in res[tg]["indices"]}
+        s1 = np.array([by[n]["S1"] for n in names]); s1c = np.array([by[n]["S1_conf"] for n in names])
+        st = np.array([by[n]["ST"] for n in names]); stc = np.array([by[n]["ST_conf"] for n in names])
+        ax.barh(y - 0.18, st, 0.34, xerr=stc, color=C[0], label="total index S_T", error_kw=dict(ecolor=INK2, lw=1))
+        ax.barh(y + 0.18, s1, 0.34, xerr=s1c, color=C[1], label="first-order index S1", error_kw=dict(ecolor=INK2, lw=1))
+        ax.axvline(0, color=INK2, lw=0.6)
+        ax.set_yticks(y)
+        ax.set_yticklabels(names if tg == "1e-04" else [], fontsize=8)
+        ax.invert_yaxis()
+        ax.set_xlabel(f"Sobol index of log10 t({tg.replace('-0', '-')}); reached {res[tg]['frac_reached']:.0%}",
+                      color=INK, fontsize=9)
+    axes[0].legend(frameon=False, fontsize=8, loc="lower right")
+    if title:
+        fig.suptitle(title, fontsize=9, color=INK)
     fig.tight_layout()
     fig.savefig(out, dpi=160)
     plt.close(fig)
