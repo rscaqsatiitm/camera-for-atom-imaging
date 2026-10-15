@@ -247,3 +247,53 @@ NOTE_TEMPLATE = '# P1 production check-in: camera presets and reduced generic sw
 
 if __name__ == "__main__":
     print(build())
+
+
+# ------------------------------------------------------------------------------- Sobol
+def sobol_results(problem="configs/production/sobol_problem.yaml"):
+    """First-order and total Sobol indices (SALib, bootstrap 95% CIs) for log10 t(1e-3), log10 t(1e-4)."""
+    from .sweep.sobol import analyse
+    d, a = load_h5(RUNS / "prod_sobol" / "prod_sobol.h5")
+    o = np.argsort(d["index"])
+    n_exp = int(a.get("n_points", len(o)))
+    if len(o) != n_exp:
+        raise RuntimeError(f"Sobol run incomplete: {len(o)} of {n_exp} points")
+    out = {}
+    for tg in ("1e-03", "1e-04"):
+        y = d[f"results/log10t_{tg}"][o]
+        reached = d[f"results/reached_{tg}"][o]
+        out[tg] = {"indices": analyse(ROOT / problem, y), "frac_reached": float(reached.mean()),
+                   "y": y, "reached": reached}
+    params = {k.split("/", 1)[1]: v[o] for k, v in d.items() if k.startswith("params/")}
+    cost = {k.split("/", 1)[1]: v for k, v in d.items() if k.startswith("cost/")}
+    return out, params, cost
+
+
+def sobol_table(res):
+    rows = []
+    names = [r["param"] for r in res["1e-04"]["indices"]]
+    by = {tg: {r["param"]: r for r in res[tg]["indices"]} for tg in res}
+    for nm in names:
+        r4, r3 = by["1e-04"][nm], by["1e-03"][nm]
+        rows.append([nm, f"{r4['S1']:.3f} +- {r4['S1_conf']:.3f}", f"{r4['ST']:.3f} +- {r4['ST_conf']:.3f}",
+                     f"{r3['S1']:.3f} +- {r3['S1_conf']:.3f}", f"{r3['ST']:.3f} +- {r3['ST_conf']:.3f}"])
+    return md_table(["parameter (ranked by S_T for 1e-4)", "S1, t(1e-4)", "S_T, t(1e-4)", "S1, t(1e-3)", "S_T, t(1e-3)"], rows)
+
+
+def fig_sobol(res, out):
+    names = [r["param"] for r in res["1e-04"]["indices"]]
+    by = {r["param"]: r for r in res["1e-04"]["indices"]}
+    fig, (ax,) = _fig(w=7.0, h=3.8)
+    y = np.arange(len(names))
+    s1 = np.array([by[n]["S1"] for n in names]); s1c = np.array([by[n]["S1_conf"] for n in names])
+    st = np.array([by[n]["ST"] for n in names]); stc = np.array([by[n]["ST_conf"] for n in names])
+    ax.barh(y - 0.18, st, 0.34, xerr=stc, color=C[0], label="total index S_T", error_kw=dict(ecolor=INK2, lw=1))
+    ax.barh(y + 0.18, s1, 0.34, xerr=s1c, color=C[1], label="first-order index S1", error_kw=dict(ecolor=INK2, lw=1))
+    ax.set_yticks(y)
+    ax.set_yticklabels(names, fontsize=8)
+    ax.invert_yaxis()
+    ax.set_xlabel("Sobol index of log10 t(1e-4)", color=INK, fontsize=9)
+    ax.legend(frameon=False, fontsize=8, loc="lower right")
+    fig.tight_layout()
+    fig.savefig(out, dpi=160)
+    plt.close(fig)
