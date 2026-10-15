@@ -272,11 +272,24 @@ def times_to_targets(eps_of_t, targets, t_lo=1e-3, t_hi=1.0, n_scan=13, survival
     """Shortest t with eps(t) <= target for several targets from one shared log scan, refined by Brent.
 
     Returns {target: t or None} and the scan. eps may rise at long t (loss), so the first crossing is used.
+    The scan stops once every target has been crossed or survival has dropped below min_survival (survival
+    decreases with t): later scan points cannot change the first crossing, and at long t they are the most
+    expensive to evaluate. The returned scan is therefore truncated at that point.
     """
     from scipy import optimize
-    ts = np.geomspace(t_lo, t_hi, n_scan)
-    eps = np.array([eps_of_t(t) for t in ts])
-    ok_s = np.ones(ts.size, bool) if survival_of_t is None else np.array([survival_of_t(t) >= min_survival for t in ts])
+    ts_all = np.geomspace(t_lo, t_hi, n_scan)
+    eps_l, ok_l = [], []
+    for t in ts_all:
+        s_ok = True if survival_of_t is None else survival_of_t(t) >= min_survival
+        if not s_ok:
+            break
+        eps_l.append(eps_of_t(t))
+        ok_l.append(s_ok)
+        if all(any(e <= tg for e in eps_l) for tg in targets):
+            break
+    if not eps_l:
+        return {tg: None for tg in targets}, (ts_all[:1], np.array([np.nan]))
+    ts, eps, ok_s = ts_all[:len(eps_l)], np.array(eps_l), np.array(ok_l)
     out = {}
     for target in targets:
         ok = (eps <= target) & ok_s
