@@ -161,3 +161,31 @@ def production_sensitivity_point(p: dict, seed: int) -> dict:
     if change.get("loss") == "high":
         q["p_loss_per_photon"] = v(p["p_loss_high"])
     return production_preset_point(q, seed)
+
+
+SOBOL_LOG10_CAP_S = 0.0   # unreached targets are censored at t = 1 s (log10 t = 0)
+
+
+def sobol_point(p: dict, seed: int) -> dict:
+    """Generic CMOS-class point for the Sobol analysis: matched filter, t(1e-3) and t(1e-4) from one scan."""
+    from ..production import Camera, eps_at, geometry, read_classes, survival, times_to_targets
+    p = _with_file(p)
+    sc = _scenario(p)
+    sc.n_offsets = int(p.get("n_offsets", 2))
+    sc.offset_rule = p.get("offset_rule", "midpoint")
+    sc.ds = float(p.get("ds", 0.02))
+    cam = Camera(qe=p["qe"], read_classes=read_classes(p["read_median_e"], p.get("tail_fraction", 0.0),
+                                                         p.get("tail_factor", 5.0)),
+                 pixels_per_fwhm=p["px_per_fwhm"], dark_e_per_px_s=p.get("dark_e_per_px_s", 0.0))
+    geo = geometry(sc, cam)
+    targets = p.get("targets", [1e-3, 1e-4])
+    res, (ts, eps) = times_to_targets(lambda t: eps_at(sc, cam, geo, t, "matched").eps, targets,
+                                      t_lo=p.get("t_range_s", [1e-3, 1.0])[0], t_hi=p.get("t_range_s", [1e-3, 1.0])[1],
+                                      survival_of_t=lambda t: survival(sc, t), min_survival=p.get("min_survival", 0.99))
+    out = {"box_px": geo.box, "eps_min_scan": float(np.min(eps))}
+    for tg in targets:
+        t = res[tg]
+        out[f"t_{tg:.0e}"] = float("nan") if t is None else t
+        out[f"log10t_{tg:.0e}"] = SOBOL_LOG10_CAP_S if t is None else float(np.log10(t))
+        out[f"reached_{tg:.0e}"] = 0.0 if t is None else 1.0
+    return out

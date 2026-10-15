@@ -6,6 +6,9 @@ scenario:
   na:                {value: 0.55, unit: "", prov: SOURCE, pointer: "arXiv:2403.12021v4 Methods: NA 0.55 at 852 nm"}
   eta_opt:           {value: 0.327, unit: "", prov: DERIVED, pointer: "0.027 / eta_coll(NA 0.55, isotropic) = 0.027/0.0825 (V1)"}
   dipole_pattern: isotropic
+  psf_kind: gaussian
+  psf_waist_m:       {value: 1.44e-6, unit: m, prov: DERIVED, pointer: "Manetsch Methods: waist 1.7 px = 7.8 um on camera, /5.1 = 1.53 um at the atom plane; pixel (0.902 um) variance d^2/12 removed: 2*sqrt(0.765^2 - 0.902^2/12) = 1.44 um (our model re-integrates over pixels)"}
+  psf_na_ref:        {value: 0.55, unit: "", prov: SOURCE, pointer: "arXiv:2403.12021v4 Methods: NA 0.55 at 852 nm"}
   p_loss_per_photon: {value: 2.35e-8, unit: "", prov: DERIVED, pointer: "-ln(0.999864)/(72.3e3 s^-1 x 0.08 s), V1 (includes vacuum loss)"}
   rate_rel_sd:       {value: 0.1226, unit: "", prov: DATA, pointer: "Manetsch Ext. Data Fig. 4d digitised (site-to-site rate spread)"}
   bg_rate_e_per_px_s: {value: 4.76, unit: e-/px/s, prov: DATA, pointer: "V1: 18.66 e- per 7x7 box in 80 ms at 0.902 um object-plane pixels, QE 0.44; scaled with pixel area and QE"}

@@ -1,0 +1,10 @@
+# Sobol analysis problem (SALib). Ranges span the generic space of the P1 prompt; 'log: true' = log-uniform.
+parameters:
+  qe:                {range: [0.2, 0.95]}
+  read_median_e:     {range: [0.1, 4.0], log: true}
+  tail_fraction:     {range: [0.0, 0.05]}
+  px_per_fwhm:       {range: [0.35, 2.0], log: true}
+  bg_scale:          {range: [0.1, 3.0], log: true}
+  dark_e_per_px_s:   {range: [0.001, 3.0], log: true}
+  na:                {range: [0.3, 0.8]}
+  p_loss_per_photon: {range: [2.0e-9, 6.0e-7], log: true}

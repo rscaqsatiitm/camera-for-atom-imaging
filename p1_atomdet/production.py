@@ -38,7 +38,11 @@ class Scenario:
     bg_rate_e_per_px_s: float = 4.76  # V1: 18.66 e- / 49 px / 80 ms at the V1 sampling (DATA); scale with sampling
     filling: float = 0.5
     psf_blur_px: float = 0.0
+    psf_kind: str = "vectorial"       # vectorial (diffraction limit at na) | gaussian (measured waist)
+    psf_waist_m: float | None = None  # object-plane 1/e^2 radius for psf_kind == gaussian, quoted at na_ref
+    psf_na_ref: float = 0.55          # gaussian waist scales as na_ref/na when na differs (assumption)
     n_offsets: int = 3                # offsets per axis on [0, 0.5] (symmetry-reduced)
+    offset_rule: str = "midpoint"     # midpoint (cell centres; default) | trapezoid (includes 0 and 0.5)
     ds: float = 0.02
     n_tau: int = 24
 
@@ -66,15 +70,23 @@ class Geometry:
 
 def geometry(sc: Scenario, cam: Camera, supersample: int = 6) -> Geometry:
     sp = SPECIES[sc.species]
-    psf = PSFSpec("vectorial", wavelength_m=float(sp.wavelength_m), na=sc.na, n_quad=48)
+    if sc.psf_kind == "gaussian":
+        psf = PSFSpec("gaussian", wavelength_m=float(sp.wavelength_m), na=sc.na,
+                      waist_m=sc.psf_waist_m * sc.psf_na_ref / sc.na)
+    else:
+        psf = PSFSpec("vectorial", wavelength_m=float(sp.wavelength_m), na=sc.na, n_quad=48)
     pitch = pitch_for_pixels_per_fwhm(psf, cam.pixels_per_fwhm)
     psf.blur_sigma_m = sc.psf_blur_px * pitch
     box = 2 * int(np.ceil(2.5 * cam.pixels_per_fwhm)) + 1
     box = max(box, 3)
-    g = np.linspace(0.0, 0.5, sc.n_offsets)
-    wt1 = np.ones(sc.n_offsets)
-    if sc.n_offsets > 1:
-        wt1[0] = wt1[-1] = 0.5
+    if sc.offset_rule == "midpoint":
+        g = (np.arange(sc.n_offsets) + 0.5) * 0.5 / sc.n_offsets
+        wt1 = np.ones(sc.n_offsets)
+    else:
+        g = np.linspace(0.0, 0.5, sc.n_offsets)
+        wt1 = np.ones(sc.n_offsets)
+        if sc.n_offsets > 1:
+            wt1[0] = wt1[-1] = 0.5
     wt = np.outer(wt1, wt1).ravel()
     wt /= wt.sum()
     fracs = [pixel_fractions(psf, pitch, box, (dx, dy), supersample) for dx in g for dy in g]
@@ -254,3 +266,27 @@ def time_to_any(sc, cam, target, pc=None, classifier="matched", geo=None, t_lo=1
     geo = geo or geometry(sc, cam)
     return time_to_target(lambda tt: max(eps_any(sc, cam, geo, tt, pc, classifier).eps, 1e-300), target, t_lo, t_hi,
                           survival_of_t=lambda tt: survival(sc, tt), min_survival=min_survival, n_scan=12)
+
+
+def times_to_targets(eps_of_t, targets, t_lo=1e-3, t_hi=1.0, n_scan=13, survival_of_t=None, min_survival=0.99):
+    """Shortest t with eps(t) <= target for several targets from one shared log scan, refined by Brent.
+
+    Returns {target: t or None} and the scan. eps may rise at long t (loss), so the first crossing is used.
+    """
+    from scipy import optimize
+    ts = np.geomspace(t_lo, t_hi, n_scan)
+    eps = np.array([eps_of_t(t) for t in ts])
+    ok_s = np.ones(ts.size, bool) if survival_of_t is None else np.array([survival_of_t(t) >= min_survival for t in ts])
+    out = {}
+    for target in targets:
+        ok = (eps <= target) & ok_s
+        if not ok.any():
+            out[target] = None
+            continue
+        j = int(np.argmax(ok))
+        if j == 0:
+            out[target] = float(ts[0])
+            continue
+        f = lambda lt: np.log(max(eps_of_t(np.exp(lt)), 1e-300)) - np.log(target)
+        out[target] = float(np.exp(optimize.brentq(f, np.log(ts[j - 1]), np.log(ts[j]), xtol=2e-3)))
+    return out, (ts, eps)
