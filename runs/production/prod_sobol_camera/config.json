@@ -1,0 +1,29 @@
+{
+ "name": "prod_sobol_camera",
+ "seed": 5009,
+ "evaluator": "p1_atomdet.sweep.evaluate:sobol_point",
+ "points_file": "configs/production/sobol_camera_points_n1024.csv",
+ "fixed": {
+  "scenario_file": "configs/production/reference_cs.yaml",
+  "targets": [
+   0.001,
+   0.0001
+  ],
+  "t_range_s": [
+   0.001,
+   5.0
+  ],
+  "tail_factor": 5.0,
+  "n_offsets": 3,
+  "offset_rule": "midpoint",
+  "ds": 0.02
+ },
+ "axes": {
+  "qe": [],
+  "read_median_e": [],
+  "tail_fraction": [],
+  "px_per_fwhm": [],
+  "bg_scale": [],
+  "dark_e_per_px_s": []
+ }
+}

@@ -11,3 +11,4 @@ runs/production/prod_sensitivity/prod_sensitivity.h5
 2026-10-15T15:32 sobol prefix 2560: 685 points left
 {'n_points': 10240, 'evaluated': 685, 'remaining': 7680}
 2026-10-15T16:53 sobol prefix 2560 done
+2026-10-15T18:12 prod_sobol_camera prefix 2048: 2048 points left

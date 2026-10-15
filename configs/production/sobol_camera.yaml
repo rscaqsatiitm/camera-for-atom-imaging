@@ -1,0 +1,24 @@
+# Production study 5: camera-only Sobol analysis of t(1e-3) and t(1e-4). Reference Cs scenario with the measured
+# V1 PSF; NA (0.55) and loss per photon (2.35e-8) fixed at the reference. Points: SALib Sobol (Saltelli) sample,
+# N = 1024, 6 parameters, no 2nd order (8192 rows; the first 8*N rows are the nested N design).
+# t_range extends to 5 s: at the reference loss, survival stays >= 0.99 up to 5.9 s (DERIVED:
+# 0.01005 / (2.35e-8 x 72300 s^-1)), so only targets slower than 5 s are censored.
+name: prod_sobol_camera
+seed: 5009
+evaluator: p1_atomdet.sweep.evaluate:sobol_point
+points_file: configs/production/sobol_camera_points_n1024.csv
+fixed:
+  scenario_file: configs/production/reference_cs.yaml
+  targets: [1.0e-3, 1.0e-4]
+  t_range_s: [0.001, 5.0]
+  tail_factor: 5.0
+  n_offsets: 3
+  offset_rule: midpoint
+  ds: 0.02
+axes:   # column order of points_file (must match sobol_camera_problem.yaml)
+  qe: []
+  read_median_e: []
+  tail_fraction: []
+  px_per_fwhm: []
+  bg_scale: []
+  dark_e_per_px_s: []

@@ -250,11 +250,11 @@ if __name__ == "__main__":
 
 
 # ------------------------------------------------------------------------------- Sobol
-def _sobol_from_points(n_rows):
+def _sobol_from_points(n_rows, name="prod_sobol"):
     """Results of the first n_rows Sobol points read from the per-point checkpoints (interim analysis)."""
     import json
     recs = {}
-    for f in (RUNS / "prod_sobol" / "points").glob("*.json"):
+    for f in (RUNS / name / "points").glob("*.json"):
         r = json.loads(f.read_text())
         if r["index"] < n_rows:
             recs[r["index"]] = r
@@ -272,7 +272,7 @@ def _sobol_from_points(n_rows):
     return d
 
 
-def sobol_results(problem="configs/production/sobol_problem.yaml", n_base=None):
+def sobol_results(problem="configs/production/sobol_problem.yaml", n_base=None, name="prod_sobol"):
     """First-order and total Sobol indices (SALib, bootstrap 95% CIs) for log10 t(1e-3), log10 t(1e-4).
 
     With n_base set, analyse the first n_base*(D+2) points only: SALib's Saltelli rows are grouped per base
@@ -280,14 +280,14 @@ def sobol_results(problem="configs/production/sobol_problem.yaml", n_base=None):
     """
     from .sweep.sobol import analyse, _problem
     if n_base is None:
-        d, a = load_h5(RUNS / "prod_sobol" / "prod_sobol.h5")
+        d, a = load_h5(RUNS / name / f"{name}.h5")
         o = np.argsort(d["index"])
         n_exp = int(a.get("n_points", len(o)))
         if len(o) != n_exp:
             raise RuntimeError(f"Sobol run incomplete: {len(o)} of {n_exp} points")
     else:
         D = _problem(ROOT / problem)[0]["num_vars"]
-        d = _sobol_from_points(n_base * (D + 2))
+        d = _sobol_from_points(n_base * (D + 2), name)
         o = np.arange(len(d["index"]))
     out = {}
     for tg in ("1e-03", "1e-04"):

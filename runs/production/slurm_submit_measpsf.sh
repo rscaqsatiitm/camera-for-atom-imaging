@@ -1,5 +1,6 @@
 #!/bin/bash
-# Submit the measured-PSF production runs (Sobol N=1024 and the reduced generic sweep) as SLURM arrays,
+# Submit the measured-PSF production runs (Sobol N=1024, camera-only Sobol N=1024, reduced generic sweep)
+# as SLURM arrays (select with CONFIGS="sobol_camera" etc.),
 # each followed by a dependent collect job that writes runs/production/<name>/<name>.h5.
 #
 #   bash runs/production/slurm_submit_measpsf.sh            # from the repository root on the cluster
@@ -7,6 +8,7 @@
 #
 # Before submitting: copy the local checkpoints so finished points are skipped (they are gitignored):
 #   rsync -a runs/production/prod_sobol/points/ <cluster>:<repo>/runs/production/prod_sobol/points/
+#   rsync -a runs/production/prod_sobol_camera/points/ <cluster>:<repo>/runs/production/prod_sobol_camera/points/
 #   rsync -a runs/production/prod_generic_reduced/points/ <cluster>:<repo>/runs/production/prod_generic_reduced/points/
 # and install the pinned environment: pip install -e '.[sweep]' -r runs/production/requirements-lock.txt
 #
@@ -22,7 +24,7 @@ MEM=${MEM:-48G}          # 16 workers x 1.8 GB peak, with margin
 TIME=${TIME:-04:00:00}
 S=p1_atomdet/sweep/slurm
 mkdir -p logs
-for c in sobol generic_reduced; do
+for c in ${CONFIGS:-sobol sobol_camera generic_reduced}; do
   cfg=configs/production/$c.yaml
   name=$(python3 -c "import yaml;print(yaml.safe_load(open('$cfg'))['name'])")
   out=runs/production/$name
