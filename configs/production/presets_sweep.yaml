@@ -11,4 +11,4 @@ axes:
   preset: [orca_quest2_std, orca_quest2_uq_pnr, prime_bsi_express_cms, prime_bsi_express_speed, zyla55_global_200MHz,
            ixon888_exf_analog, ixon888_exf_pc, orca_fusion_bt_uq, marana_42b6_lownoise, qhy268m_imx571_hg2cms,
            blackfly_s_bfs_u3_17s7m_hcg]
-  px_per_fwhm: [0.7, 1.0, 1.4, 2.0, 3.0]
+  px_per_fwhm: [0.35, 0.5, 0.7, 1.0, 1.4, 2.0, 3.0]

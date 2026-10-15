@@ -30,6 +30,8 @@
    "blackfly_s_bfs_u3_17s7m_hcg"
   ],
   "px_per_fwhm": [
+   0.35,
+   0.5,
    0.7,
    1.0,
    1.4,
