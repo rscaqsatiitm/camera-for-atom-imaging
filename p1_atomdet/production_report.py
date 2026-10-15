@@ -250,14 +250,45 @@ if __name__ == "__main__":
 
 
 # ------------------------------------------------------------------------------- Sobol
-def sobol_results(problem="configs/production/sobol_problem.yaml"):
-    """First-order and total Sobol indices (SALib, bootstrap 95% CIs) for log10 t(1e-3), log10 t(1e-4)."""
-    from .sweep.sobol import analyse
-    d, a = load_h5(RUNS / "prod_sobol" / "prod_sobol.h5")
-    o = np.argsort(d["index"])
-    n_exp = int(a.get("n_points", len(o)))
-    if len(o) != n_exp:
-        raise RuntimeError(f"Sobol run incomplete: {len(o)} of {n_exp} points")
+def _sobol_from_points(n_rows):
+    """Results of the first n_rows Sobol points read from the per-point checkpoints (interim analysis)."""
+    import json
+    recs = {}
+    for f in (RUNS / "prod_sobol" / "points").glob("*.json"):
+        r = json.loads(f.read_text())
+        if r["index"] < n_rows:
+            recs[r["index"]] = r
+    if len(recs) != n_rows:
+        raise RuntimeError(f"Sobol prefix incomplete: {len(recs)} of {n_rows} points")
+    rs = [recs[i] for i in range(n_rows)]
+    d = {"index": np.arange(n_rows)}
+    for k in rs[0]["result"]:
+        d[f"results/{k}"] = np.array([r["result"][k] for r in rs], float)
+    for k in rs[0]["point"]:
+        if isinstance(rs[0]["point"][k], (int, float)):
+            d[f"params/{k}"] = np.array([r["point"][k] for r in rs], float)
+    for k in rs[0]["cost"]:
+        d[f"cost/{k}"] = np.array([r["cost"][k] for r in rs], float)
+    return d
+
+
+def sobol_results(problem="configs/production/sobol_problem.yaml", n_base=None):
+    """First-order and total Sobol indices (SALib, bootstrap 95% CIs) for log10 t(1e-3), log10 t(1e-4).
+
+    With n_base set, analyse the first n_base*(D+2) points only: SALib's Saltelli rows are grouped per base
+    point and the scrambled base sequence is seeded, so this prefix is exactly the N = n_base design.
+    """
+    from .sweep.sobol import analyse, _problem
+    if n_base is None:
+        d, a = load_h5(RUNS / "prod_sobol" / "prod_sobol.h5")
+        o = np.argsort(d["index"])
+        n_exp = int(a.get("n_points", len(o)))
+        if len(o) != n_exp:
+            raise RuntimeError(f"Sobol run incomplete: {len(o)} of {n_exp} points")
+    else:
+        D = _problem(ROOT / problem)[0]["num_vars"]
+        d = _sobol_from_points(n_base * (D + 2))
+        o = np.arange(len(d["index"]))
     out = {}
     for tg in ("1e-03", "1e-04"):
         y = d[f"results/log10t_{tg}"][o]
