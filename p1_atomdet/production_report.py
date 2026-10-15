@@ -184,3 +184,47 @@ def cost_summary(*costs):
         rows.append([name, len(Cst["cpu_h"]), f"{Cst['cpu_h'].sum():.2f}", f"{3600 * np.median(Cst['cpu_h']):.0f}",
                      f"{3600 * Cst['cpu_h'].max():.0f}", f"{Cst['peak_rss_mb'].max():.0f}"])
     return md_table(["study", "points", "CPU-h total", "median CPU-s/point", "max CPU-s/point", "peak RSS (MB)"], rows)
+
+
+def build(out_md: Path = ROOT / "reports" / "p1_production_note.md") -> Path:
+    FIG.mkdir(parents=True, exist_ok=True)
+    Pp, Rp, Cp, _ = _load("prod_presets")
+    Pg, Rg, Cg, _ = _load("prod_generic_reduced")
+    Ps, Rs, Cs, _ = _load("prod_sensitivity")
+    ptab, best, names = preset_table(Pp, Rp)
+    stab = sampling_table(Pp, Rp, names)
+    fig_presets(Pp, Rp, best, names, FIG / "prod_presets.png")
+    qe, rn, maps = generic_views(Pg, Rg, FIG / "prod_generic_map.png")
+    ref = {"qe": 0.6, "read_median_e": 1.0, "tail_fraction": 0.0, "px_per_fwhm": 0.7, "bg_scale": 1.0}
+    oat4 = one_at_a_time(Pg, Rg, ref, "matched_t_1e-04")
+    oat3 = one_at_a_time(Pg, Rg, ref, "matched_t_1e-03")
+    sens = sensitivity_table(Ps, Rs)
+    cost = cost_summary(("presets", Cp), ("generic (reduced)", Cg), ("sensitivity", Cs))
+
+    # best sampling per (qe, read noise) in the generic grid (tail 0, bg x1)
+    rows = []
+    for r in sorted(set(Pg["read_median_e"])):
+        row = [f"{r:g}"]
+        for q in sorted(set(Pg["qe"])):
+            m = (Pg["qe"] == q) & (Pg["read_median_e"] == r) & (Pg["tail_fraction"] == 0) & (Pg["bg_scale"] == 1.0)
+            sel = np.nonzero(m)[0]
+            t = Rg["matched_t_1e-04"][sel]
+            if np.isfinite(t).any():
+                k = sel[int(np.nanargmin(t))]
+                row.append(f"{Pg['px_per_fwhm'][k]:g} ({1000 * Rg['matched_t_1e-04'][k]:.0f} ms)")
+            else:
+                row.append("n/r")
+        rows.append(row)
+    best_ppf = md_table(["read median (e-) \\ QE"] + [f"{q:g}" for q in sorted(set(Pg["qe"]))], rows)
+    text = NOTE_TEMPLATE.format(ptab=ptab, stab=stab, best_ppf=best_ppf, oat4=oat4, oat3=oat3, sens=sens, cost=cost,
+                                placeholders=placeholder_markdown(open_placeholders()),
+                                n_open=len(open_placeholders()))
+    out_md.write_text(text)
+    return out_md
+
+
+NOTE_TEMPLATE = ""  # filled below after the results are read (see bottom of file)
+
+
+if __name__ == "__main__":
+    print(build())
