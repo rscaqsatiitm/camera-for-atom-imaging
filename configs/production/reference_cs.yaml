@@ -1,0 +1,15 @@
+# Reference scenario for the production stage: Cs D2 tweezer imaging anchored on the V1 fit
+# (Manetsch et al., arXiv:2403.12021v4). Values are DERIVED from the V1 report unless stated.
+scenario:
+  species: Cs133
+  rate_s:            {value: 72300.0, unit: s^-1, prov: DERIVED, pointer: "V1 implied scattering rate mu/(t eta QE), reports/p1_validation.md Table V1-c"}
+  na:                {value: 0.55, unit: "", prov: SOURCE, pointer: "arXiv:2403.12021v4 Methods: NA 0.55 at 852 nm"}
+  eta_opt:           {value: 0.327, unit: "", prov: DERIVED, pointer: "0.027 / eta_coll(NA 0.55, isotropic) = 0.027/0.0825 (V1)"}
+  dipole_pattern: isotropic
+  p_loss_per_photon: {value: 2.35e-8, unit: "", prov: DERIVED, pointer: "-ln(0.999864)/(72.3e3 s^-1 x 0.08 s), V1 (includes vacuum loss)"}
+  rate_rel_sd:       {value: 0.1226, unit: "", prov: DATA, pointer: "Manetsch Ext. Data Fig. 4d digitised (site-to-site rate spread)"}
+  bg_rate_e_per_px_s: {value: 4.76, unit: e-/px/s, prov: DATA, pointer: "V1: 18.66 e- per 7x7 box in 80 ms at 0.902 um object-plane pixels, QE 0.44; scaled with pixel area and QE"}
+  filling:           {value: 0.5, unit: "", prov: USER, pointer: "P1 plan: filling 0.5 (stated assumption)"}
+targets: [1.0e-3, 1.0e-4]
+min_survival: 0.99
+t_range_s: [0.001, 0.3]

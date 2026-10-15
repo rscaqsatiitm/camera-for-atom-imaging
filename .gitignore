@@ -6,6 +6,8 @@ build/
 dist/
 runs/*
 !runs/validation/
+!runs/production/
 *.h5.tmp
 sources/*.pdf
 sources/*.txt
+runs/production/*/points/

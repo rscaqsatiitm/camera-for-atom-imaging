@@ -1,0 +1,167 @@
+schema_version: '1.0'
+name: zyla55_global_200MHz
+camera: Andor Zyla 5.5 sCMOS
+mode: global shutter, 200 MHz
+sensor_type: sCMOS
+notes: ''
+qe:
+  wavelength_nm:
+  - 780.24
+  - 852.35
+  temperature_K:
+  - 293.15
+  values:
+  - - 0.404
+    - 0.249
+  prov:
+    value: 780/852 points
+    unit: ''
+    prov: DATA
+    pointer: DATA digitised from SOURCE Andor 'Zyla for Physical Sciences sCMOS Specifications' LZYLASPECTSS 1020
+      R1 QE chart p.8 (+-1.5% abs)
+    note: ''
+qe_780:
+  value: 0.404
+  unit: ''
+  prov: DATA
+  pointer: SOURCE Andor 'Zyla for Physical Sciences sCMOS Specifications' LZYLASPECTSS 1020 R1, QE chart p.8, digitised
+    +-1.5%
+  note: ''
+qe_852:
+  value: 0.249
+  unit: ''
+  prov: DATA
+  pointer: SOURCE Andor 'Zyla for Physical Sciences sCMOS Specifications' LZYLASPECTSS 1020 R1, QE chart p.8, digitised
+    +-1.5% (Picken et al. state 0.22)
+  note: ''
+prnu:
+  value: 0.005
+  unit: ''
+  prov: PLACEHOLDER
+  pointer: ''
+  note: not stated
+read_noise:
+  kind: empirical_sigma_cdf
+  sigma_e:
+  - 2.3
+  - 6.8999999999999995
+  cdf:
+  - 0.9773156899810964
+  - 1.0
+  prov:
+    value: core 2.3 e-, 0.0227 of pixels at 6.90 e-
+    unit: ''
+    prov: DERIVED
+    pointer: 'matches median 2.3 and rms 2.5 (SOURCE Andor ''Zyla for Physical Sciences sCMOS Specifications'' LZYLASPECTSS
+      1020 R1 p.6: global shutter @200 MHz median 2.3 [rms 2.5]); tail shape assumed 3x median'
+    note: ''
+read_noise_median_e:
+  value: 2.3
+  unit: e-
+  prov: SOURCE
+  pointer: SOURCE Andor 'Zyla for Physical Sciences sCMOS Specifications' LZYLASPECTSS 1020 R1 p.6
+  note: ''
+read_noise_rms_e:
+  value: 2.5
+  unit: e-
+  prov: SOURCE
+  pointer: SOURCE Andor 'Zyla for Physical Sciences sCMOS Specifications' LZYLASPECTSS 1020 R1 p.6
+  note: ''
+adc:
+  gain_e_per_adu:
+    value: 0.375
+    unit: e-/ADU
+    prov: DERIVED
+    pointer: 'V2 fit: mean of 0.381 and 0.368 (reports/p1_validation.md Table V2-a)'
+    note: ''
+  adc_bits:
+    value: 16
+    unit: bit
+    prov: SOURCE
+    pointer: 'SOURCE Andor ''Zyla for Physical Sciences sCMOS Specifications'' LZYLASPECTSS 1020 R1 p.6: 12-bit
+      and 16-bit'
+    note: ''
+  full_well_e:
+    value: 30000
+    unit: e-
+    prov: SOURCE
+    pointer: SOURCE Andor 'Zyla for Physical Sciences sCMOS Specifications' LZYLASPECTSS 1020 R1 p.6
+    note: ''
+  offset_adu:
+    value: 100
+    unit: ADU
+    prov: PLACEHOLDER
+    pointer: ''
+    note: ''
+dark:
+  D_ref:
+    value: 0.1
+    unit: e-/px/s
+    prov: SOURCE
+    pointer: 'SOURCE Andor ''Zyla for Physical Sciences sCMOS Specifications'' LZYLASPECTSS 1020 R1 p.6: air cooled
+      0 C, 0.10 e-/px/s'
+    note: ''
+  T_ref_K:
+    value: 273.15
+    unit: K
+    prov: SOURCE
+    pointer: 'SOURCE Andor ''Zyla for Physical Sciences sCMOS Specifications'' LZYLASPECTSS 1020 R1 p.6: air cooled
+      0 C, 0.10 e-/px/s'
+    note: ''
+  Ea_eV:
+    value: 0.6
+    unit: eV
+    prov: PLACEHOLDER
+    pointer: ''
+    note: single vendor point; P4 to supply D(T)
+  T_op_K:
+    value: 273.15
+    unit: K
+    prov: SOURCE
+    pointer: 'SOURCE Andor ''Zyla for Physical Sciences sCMOS Specifications'' LZYLASPECTSS 1020 R1 p.6: air cooled
+      0 C, 0.10 e-/px/s'
+    note: ''
+emccd: null
+pixel_pitch_um:
+  value: 6.5
+  unit: um
+  prov: SOURCE
+  pointer: SOURCE Andor 'Zyla for Physical Sciences sCMOS Specifications' LZYLASPECTSS 1020 R1 p.6
+  note: ''
+mtf: null
+shutter:
+  type: global
+  line_time_us:
+    value: 0.0
+    unit: us
+    prov: PLACEHOLDER
+    pointer: ''
+    note: global shutter
+  frame_time_ms:
+    value: 20.41
+    unit: ms
+    prov: SOURCE
+    pointer: 'SOURCE Andor ''Zyla for Physical Sciences sCMOS Specifications'' LZYLASPECTSS 1020 R1 p.7: 49 fps
+      global, Camera Link 10-tap'
+    note: ''
+  n_rows: 2160
+cosmic:
+  rate_per_cm2_s:
+    value: 0.0167
+    unit: cm^-2 s^-1
+    prov: PLACEHOLDER
+    pointer: ''
+    note: sea-level muon flux ~1 cm^-2 min^-1, recalled
+  deposit_e_per_um:
+    value: 80
+    unit: e-/um
+    prov: PLACEHOLDER
+    pointer: ''
+    note: MIP deposit in Si, recalled
+  thickness_um:
+    value: 10.0
+    unit: um
+    prov: PLACEHOLDER
+    pointer: ''
+    note: sensitive thickness not stated
+qcmos_pnr: false

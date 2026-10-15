@@ -1,0 +1,157 @@
+schema_version: '1.0'
+name: qhy268m_imx571_hg2cms
+camera: QHYCCD QHY268M (Sony IMX571 mono)
+mode: High Gain-2CMS, gain 56
+sensor_type: CMOS
+notes: ''
+qe:
+  wavelength_nm:
+  - 780.24
+  - 852.35
+  temperature_K:
+  - 293.15
+  values:
+  - - 0.314
+    - 0.208
+  prov:
+    value: 780/852 points
+    unit: ''
+    prov: DATA
+    pointer: DATA digitised from QHY 'Absolute Response' curve, qhyccd.com/measuring-the-absolute-qe-of-the-qhy268m/
+      (+-0.5% reading; +-3% rel. scale)
+    note: ''
+qe_780:
+  value: 0.314
+  unit: ''
+  prov: DATA
+  pointer: DATA digitised from QHY 'Absolute Response' curve, qhyccd.com/measuring-the-absolute-qe-of-the-qhy268m/
+    (+-0.5% reading; +-3% rel. scale)
+  note: ''
+qe_852:
+  value: 0.208
+  unit: ''
+  prov: DATA
+  pointer: DATA digitised from QHY 'Absolute Response' curve, qhyccd.com/measuring-the-absolute-qe-of-the-qhy268m/
+    (+-0.5% reading; +-3% rel. scale)
+  note: ''
+prnu:
+  value: 0.005
+  unit: ''
+  prov: PLACEHOLDER
+  pointer: ''
+  note: not stated
+read_noise:
+  kind: gaussian
+  sigma_e:
+    value: 1.58
+    unit: e-
+    prov: SOURCE
+    pointer: 'SOURCE qhyccd.com/astronomical-camera-qhy268/ (modified 2026-06-16): read-noise chart label 1.58 e-
+      (High Gain-2CMS, gain 56)'
+    note: ''
+read_noise_median_e:
+  value: 1.58
+  unit: e-
+  prov: PLACEHOLDER
+  pointer: ''
+  note: statistic not stated
+read_noise_rms_e:
+  value: 1.58
+  unit: e-
+  prov: PLACEHOLDER
+  pointer: ''
+  note: ''
+adc:
+  gain_e_per_adu:
+    value: 0.44
+    unit: e-/ADU
+    prov: SOURCE
+    pointer: 'SOURCE qhyccd.com/astronomical-camera-qhy268/ (modified 2026-06-16): system-gain chart 0.44 e-/ADU
+      (HG, gain 56)'
+    note: ''
+  adc_bits:
+    value: 16
+    unit: bit
+    prov: SOURCE
+    pointer: SOURCE qhyccd.com/astronomical-camera-qhy268/ (modified 2026-06-16)
+    note: ''
+  full_well_e:
+    value: 28528
+    unit: e-
+    prov: SOURCE
+    pointer: 'SOURCE qhyccd.com/astronomical-camera-qhy268/ (modified 2026-06-16): full-well chart, HG gain 56'
+    note: ''
+  offset_adu:
+    value: 100
+    unit: ADU
+    prov: PLACEHOLDER
+    pointer: ''
+    note: ''
+dark:
+  D_ref:
+    value: 0.0005
+    unit: e-/px/s
+    prov: SOURCE
+    pointer: 'SOURCE qhyccd.com/astronomical-camera-qhy268/ (modified 2026-06-16): 0.0005 e-/px/s at -20 C'
+    note: ''
+  T_ref_K:
+    value: 253.14999999999998
+    unit: K
+    prov: SOURCE
+    pointer: 'SOURCE qhyccd.com/astronomical-camera-qhy268/ (modified 2026-06-16): 0.0005 e-/px/s at -20 C'
+    note: ''
+  Ea_eV:
+    value: 0.3645
+    unit: eV
+    prov: DERIVED
+    pointer: two-point fit 0.0005 @ -20 C and 0.001 @ -10 C (QHY268 spec table)
+    note: ''
+  T_op_K:
+    value: 253.14999999999998
+    unit: K
+    prov: SOURCE
+    pointer: 'SOURCE qhyccd.com/astronomical-camera-qhy268/ (modified 2026-06-16): 0.0005 e-/px/s at -20 C'
+    note: ''
+emccd: null
+pixel_pitch_um:
+  value: 3.76
+  unit: um
+  prov: SOURCE
+  pointer: SOURCE qhyccd.com/astronomical-camera-qhy268/ (modified 2026-06-16)
+  note: ''
+mtf: null
+shutter:
+  type: rolling
+  line_time_us:
+    value: 40.0
+    unit: us
+    prov: PLACEHOLDER
+    pointer: ''
+    note: ~ 1/(6 fps x 4176 rows); not stated
+  frame_time_ms:
+    value: 166.7
+    unit: ms
+    prov: SOURCE
+    pointer: 'SOURCE qhyccd.com/astronomical-camera-qhy268/ (modified 2026-06-16): 6 fps full frame 16-bit'
+    note: ''
+  n_rows: 4176
+cosmic:
+  rate_per_cm2_s:
+    value: 0.0167
+    unit: cm^-2 s^-1
+    prov: PLACEHOLDER
+    pointer: ''
+    note: sea-level muon flux ~1 cm^-2 min^-1, recalled
+  deposit_e_per_um:
+    value: 80
+    unit: e-/um
+    prov: PLACEHOLDER
+    pointer: ''
+    note: MIP deposit in Si, recalled
+  thickness_um:
+    value: 10.0
+    unit: um
+    prov: PLACEHOLDER
+    pointer: ''
+    note: sensitive thickness not stated
+qcmos_pnr: false
