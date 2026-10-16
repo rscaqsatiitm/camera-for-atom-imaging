@@ -11,3 +11,8 @@ runs/*
 sources/*.pdf
 sources/*.txt
 runs/production/*/points/
+reports/latex/*.aux
+reports/latex/*.log
+reports/latex/*.fls
+reports/latex/*.fdb_latexmk
+reports/latex/*.out
