@@ -1,0 +1,23 @@
+# Production study 4: Sobol analysis of t(1e-3) and t(1e-4), generic CMOS-class camera, reference scenario
+# with the measured V1 PSF. Points: SALib Sobol (Saltelli) sample, N = 1024, 8 parameters, no 2nd order.
+name: prod_sobol
+seed: 5008
+evaluator: p1_atomdet.sweep.evaluate:sobol_point
+points_file: configs/production/sobol_points_n1024.csv
+fixed:
+  scenario_file: configs/production/reference_cs.yaml
+  targets: [1.0e-3, 1.0e-4]
+  t_range_s: [0.001, 1.0]
+  tail_factor: 5.0
+  n_offsets: 3
+  offset_rule: midpoint
+  ds: 0.02
+axes:   # column order of points_file (must match sobol_problem.yaml)
+  qe: []
+  read_median_e: []
+  tail_fraction: []
+  px_per_fwhm: []
+  bg_scale: []
+  dark_e_per_px_s: []
+  na: []
+  p_loss_per_photon: []

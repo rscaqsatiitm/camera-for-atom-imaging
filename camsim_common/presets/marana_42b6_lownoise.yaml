@@ -1,0 +1,161 @@
+schema_version: '1.0'
+name: marana_42b6_lownoise
+camera: Andor Marana 4.2B-6
+mode: low noise 12-bit, 180 MHz
+sensor_type: sCMOS
+notes: ''
+qe:
+  wavelength_nm:
+  - 780.24
+  - 852.35
+  temperature_K:
+  - 293.15
+  values:
+  - - 0.645
+    - 0.47
+  prov:
+    value: 780/852 points
+    unit: ''
+    prov: DATA
+    pointer: DATA digitised from USER PDF andor-marana-scmos-specifications.pdf (MARANAFAMILY SS 0926 R1, sha256
+      7863aba3) QE chart (4.2B-6 dashed curve), +-2% abs
+    note: ''
+qe_780:
+  value: 0.645
+  unit: ''
+  prov: DATA
+  pointer: USER PDF andor-marana-scmos-specifications.pdf (MARANAFAMILY SS 0926 R1, sha256 7863aba3), QE chart,
+    +-2%
+  note: ''
+qe_852:
+  value: 0.47
+  unit: ''
+  prov: DATA
+  pointer: USER PDF andor-marana-scmos-specifications.pdf (MARANAFAMILY SS 0926 R1, sha256 7863aba3), QE chart,
+    +-2%
+  note: ''
+prnu:
+  value: 0.005
+  unit: ''
+  prov: PLACEHOLDER
+  pointer: ''
+  note: not stated
+read_noise:
+  kind: gaussian
+  sigma_e:
+    value: 1.1
+    unit: e- median
+    prov: USER
+    pointer: 'USER PDF andor-marana-scmos-specifications.pdf (MARANAFAMILY SS 0926 R1, sha256 7863aba3): read noise
+      median 1.1 e- (Low Noise, 12-bit)'
+    note: ''
+read_noise_median_e:
+  value: 1.1
+  unit: e-
+  prov: USER
+  pointer: USER PDF andor-marana-scmos-specifications.pdf (MARANAFAMILY SS 0926 R1, sha256 7863aba3)
+  note: ''
+read_noise_rms_e:
+  value: 1.1
+  unit: e-
+  prov: PLACEHOLDER
+  pointer: ''
+  note: rms not stated
+adc:
+  gain_e_per_adu:
+    value: 0.3
+    unit: e-/ADU
+    prov: PLACEHOLDER
+    pointer: ''
+    note: not stated
+  adc_bits:
+    value: 12
+    unit: bit
+    prov: USER
+    pointer: USER PDF andor-marana-scmos-specifications.pdf (MARANAFAMILY SS 0926 R1, sha256 7863aba3)
+    note: ''
+  full_well_e:
+    value: 1250
+    unit: e-
+    prov: USER
+    pointer: 'USER PDF andor-marana-scmos-specifications.pdf (MARANAFAMILY SS 0926 R1, sha256 7863aba3): 1250 e-
+      low noise mode'
+    note: ''
+  offset_adu:
+    value: 100
+    unit: ADU
+    prov: PLACEHOLDER
+    pointer: ''
+    note: ''
+dark:
+  D_ref:
+    value: 0.15
+    unit: e-/px/s
+    prov: USER
+    pointer: 'USER PDF andor-marana-scmos-specifications.pdf (MARANAFAMILY SS 0926 R1, sha256 7863aba3): 0.15 e-/px/s
+      air cooled @ -25 C'
+    note: ''
+  T_ref_K:
+    value: 248.14999999999998
+    unit: K
+    prov: USER
+    pointer: 'USER PDF andor-marana-scmos-specifications.pdf (MARANAFAMILY SS 0926 R1, sha256 7863aba3): 0.15 e-/px/s
+      air cooled @ -25 C'
+    note: ''
+  Ea_eV:
+    value: 0.0682
+    unit: eV
+    prov: DERIVED
+    pointer: two-point fit 0.10 @ -45 C (liquid) and 0.15 @ -25 C (air)
+    note: ''
+  T_op_K:
+    value: 248.14999999999998
+    unit: K
+    prov: USER
+    pointer: 'USER PDF andor-marana-scmos-specifications.pdf (MARANAFAMILY SS 0926 R1, sha256 7863aba3): 0.15 e-/px/s
+      air cooled @ -25 C'
+    note: ''
+emccd: null
+pixel_pitch_um:
+  value: 6.5
+  unit: um
+  prov: USER
+  pointer: USER PDF andor-marana-scmos-specifications.pdf (MARANAFAMILY SS 0926 R1, sha256 7863aba3)
+  note: ''
+mtf: null
+shutter:
+  type: rolling
+  line_time_us:
+    value: 11.4
+    unit: us
+    prov: DERIVED
+    pointer: 'USER PDF andor-marana-scmos-specifications.pdf (MARANAFAMILY SS 0926 R1, sha256 7863aba3): 43 fps
+      full frame (12-bit, USB) / 2046 rows'
+    note: ''
+  frame_time_ms:
+    value: 23.26
+    unit: ms
+    prov: USER
+    pointer: 'USER PDF andor-marana-scmos-specifications.pdf (MARANAFAMILY SS 0926 R1, sha256 7863aba3): 43 fps'
+    note: ''
+  n_rows: 2046
+cosmic:
+  rate_per_cm2_s:
+    value: 0.0167
+    unit: cm^-2 s^-1
+    prov: PLACEHOLDER
+    pointer: ''
+    note: sea-level muon flux ~1 cm^-2 min^-1, recalled
+  deposit_e_per_um:
+    value: 80
+    unit: e-/um
+    prov: PLACEHOLDER
+    pointer: ''
+    note: MIP deposit in Si, recalled
+  thickness_um:
+    value: 10.0
+    unit: um
+    prov: PLACEHOLDER
+    pointer: ''
+    note: sensitive thickness not stated
+qcmos_pnr: false

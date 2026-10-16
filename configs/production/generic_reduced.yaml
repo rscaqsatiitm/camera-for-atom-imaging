@@ -1,0 +1,15 @@
+# Production study 2: reduced generic CMOS-class sweep (coarse), reference scenario.
+name: prod_generic_reduced
+seed: 5006
+evaluator: p1_atomdet.sweep.evaluate:production_generic_point
+fixed:
+  scenario_file: configs/production/reference_cs.yaml
+  targets: [1.0e-3, 1.0e-4]
+  eps_at_ms: [20, 80]
+  tail_factor: 5.0             # tail pixels at 5x the median rms (assumption; P4 will supply the distribution)
+axes:
+  qe: [0.2, 0.4, 0.6, 0.8, 0.95]
+  read_median_e: [0.1, 0.3, 1.0, 2.0, 4.0]
+  tail_fraction: [0.0, 0.05]
+  px_per_fwhm: [0.35, 0.5, 0.7, 1.0, 1.5]
+  bg_scale: [0.0, 1.0, 3.0]

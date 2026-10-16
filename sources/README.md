@@ -30,3 +30,32 @@ the filled histogram in each pixel column and calibrating against the printed ax
 Moments of Ext. Data Fig. 4b (main linear panel) used in V1 were obtained the same way. The
 estimated resolution is 0.2 photon on the x axis and about 1 px (0.25% of the peak) on linear
 y axes; 0.04 decades on the log inset.
+
+## Production stage (2026-10-15): camera documents
+
+USER-supplied PDFs (uploaded by the PI; read in this session):
+
+| Document | SHA-256 (prefix) | Used for |
+|---|---|---|
+| Teledyne Photometrics, Prime BSI Express datasheet, revision date 2024-08-20 | 1c867b6f09affb24 | modes table (read noise, line time, full well, bit depth, dark current), QE curve (digitised) |
+| Hamamatsu ORCA-Quest 2 C15550-22UP, Cat. No. SCAS0166E03 (Jun. 2026) | 8497f943da734aad | spec table (read noise median/rms per scan, full well, PRNU, dark current, frame rates), QE curve p.6 (digitised) |
+| Andor iXon Ultra EMCCD specifications (888 and 897) | d0b88cd4c37144ed | read noise per speed, EM gain, spurious background, dark current, well depths, crop-mode frame rates, QE chart (digitised) |
+| Andor Marana sCMOS specifications, MARANAFAMILY SS 0926 R1 | 7863aba3351af711 | read noise (median), well depth, dark current, frame rates, QE chart (digitised) |
+
+Vendor documents retrieved on 2026-10-15 by retrieval sub-agents of this session and spot-checked by
+direct reading of the quoted lines (files kept in the session scratchpad, not committed):
+
+| Document | URL | SHA-256 (prefix) | Used for |
+|---|---|---|---|
+| Hamamatsu C15550-22UP instruction manual B9200301-02 Ver.1.2 (Mar. 2025) | hamamatsu.com/.../manual/C15550-22UP_IM_En.pdf | 5417560f644925ff | conversion factor 0.107 e-/count, 1H line times, PNR output range, dark offset |
+| Hamamatsu ORCA-Fusion BT instruction manual B0850301-05 Ver.1.5 (Oct. 2025) | hamamatsu.com/.../manual/C15440-20UP,-20UP01_IM_En.pdf | ffa23b21a177e454 | read noise per scan (p.80, checked), conversion factor, dark current, 1H |
+| Hamamatsu ORCA-Fusion BT brochure SCAS0143E03 (Jun. 2026) | hamamatsu.com/.../SCAS0143E_C15440-20UP.pdf | e481b889d2851dba | QE curve (digitised, +-2%) |
+| Hamamatsu ORCA-Quest technical note SCAS0154E06 (Apr. 2025) | hamamatsu.com/.../SCAS0154E_C15550-20UP_tec.pdf | 91784acb9abfc31a | original Quest QE curve: 39.6% at 852 nm (cf. 44% stated by Manetsch et al.) |
+| Andor "Zyla for Physical Sciences sCMOS Specifications" LZYLASPECTSS 1020 R1 | oxinst.com/learning/uploads/Andor_Zyla_for_Physical_Sciences_Specifications.pdf | a791a99950be137d | read noise median [rms] rolling and global shutter (p.6, checked), dark current, QE chart (digitised) |
+| FLIR EMVA 1288 data, BFS-U3-17S7 (11/15/2022) | softwareservices.flir.com/BFS-U3-17S7/latest/EMVA/EMVA.html | (HTML) | read noise 4.69 e-, gain 0.31 e-/ADU, saturation 19557 e- (checked); QE curve PNG (digitised +-1%) |
+| FLIR BFS-U3-17S7 specification page | softwareservices.flir.com/BFS-U3-17S7/latest/Model/spec.html | (HTML) | global shutter, 9 um pixels, ADC (checked) |
+| QHYCCD QHY268 product page (modified 2026-06-16) and QE article (2021-05-24) | qhyccd.com/astronomical-camera-qhy268/ | (HTML) | 3.76 um, rolling shutter, dark current, read-noise chart (1.58 e- HG-2CMS gain 56, checked); absolute QE curve (digitised; +-3% rel. scale) |
+| Gpixel GSENSE2020BSI flyer GP-PR250801 V1.1 and QE curve | gpixel.com | db3bc5559493e0d6 | cross-check: 48.1% at 852 nm vs 48.5% from the Prime BSI curve |
+
+QE at 780 and 852 nm is not printed in any of these documents; every such value is DATA,
+digitised from a typical-performance curve, with the method and uncertainty in the preset pointer.

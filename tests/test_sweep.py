@@ -29,3 +29,21 @@ def test_seeds_independent_of_execution_order(tmp_path):
         ra = json.loads((tmp_path / "a" / "points" / f"{i:07d}.json").read_text())
         rb = json.loads((tmp_path / "b" / "points" / f"{i:07d}.json").read_text())
         assert ra["result"] == rb["result"]
+
+
+def test_times_to_targets_early_stop_matches_full_scan():
+    """Stopping the scan after the last first-crossing leaves every crossing time unchanged."""
+    import numpy as np
+    from p1_atomdet.production import times_to_targets
+    calls = []
+
+    def eps(t):  # falls as exp(-t/tau), then rises (loss); minimum near 0.2 s
+        calls.append(t)
+        return 0.5 * np.exp(-t / 0.012) + 2e-5 * (t / 0.2) ** 4
+    res, (ts, _) = times_to_targets(eps, [1e-3, 1e-4], t_lo=1e-3, t_hi=5.0)
+    for tg, tau in ((1e-3, 0.012 * np.log(500)), (1e-4, 0.012 * np.log(5000))):
+        assert abs(res[tg] / tau - 1) < 5e-3
+    assert ts[-1] < 0.2 and max(calls) < 0.2           # never evaluated the expensive long-t points
+    res_s, _ = times_to_targets(eps, [1e-5], t_lo=1e-3, t_hi=5.0,
+                                survival_of_t=lambda t: np.exp(-t), min_survival=0.99)
+    assert res_s[1e-5] is None                          # unreachable before survival drops below 0.99

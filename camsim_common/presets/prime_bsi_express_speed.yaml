@@ -1,0 +1,165 @@
+schema_version: '1.0'
+name: prime_bsi_express_speed
+camera: Teledyne Photometrics Prime BSI Express (GSENSE2020BSI)
+mode: Speed (200 MHz)
+sensor_type: sCMOS
+notes: ''
+qe:
+  wavelength_nm:
+  - 780.24
+  - 852.35
+  temperature_K:
+  - 293.15
+  values:
+  - - 0.638
+    - 0.485
+  prov:
+    value: 780/852 points
+    unit: ''
+    prov: DATA
+    pointer: USER PDF Prime_BSI_Express_DS_web_datasheet.pdf (rev. 2024-08-20, sha256 1c867b6f), digitised from
+      QE curve p.3 (300 dpi; anchors 95.4% peak vs 95%, 800 nm 58.5% vs flyer 60%); +-1.5% abs; etalon ripple 46.8-48.9%
+      within +-5 nm of 852
+    note: ''
+qe_780:
+  value: 0.638
+  unit: ''
+  prov: DATA
+  pointer: USER PDF Prime_BSI_Express_DS_web_datasheet.pdf (rev. 2024-08-20, sha256 1c867b6f), digitised from QE
+    curve p.3 (300 dpi; anchors 95.4% peak vs 95%, 800 nm 58.5% vs flyer 60%); +-1.5% abs; etalon ripple 46.8-48.9%
+    within +-5 nm of 852
+  note: ''
+qe_852:
+  value: 0.485
+  unit: ''
+  prov: DATA
+  pointer: USER PDF Prime_BSI_Express_DS_web_datasheet.pdf (rev. 2024-08-20, sha256 1c867b6f), digitised from QE
+    curve p.3 (300 dpi; anchors 95.4% peak vs 95%, 800 nm 58.5% vs flyer 60%); +-1.5% abs; etalon ripple 46.8-48.9%
+    within +-5 nm of 852
+  note: ''
+prnu:
+  value: 0.005
+  unit: ''
+  prov: PLACEHOLDER
+  pointer: ''
+  note: not stated in the datasheet
+read_noise:
+  kind: gaussian
+  sigma_e:
+    value: 1.6
+    unit: e-
+    prov: USER
+    pointer: 'USER PDF Prime_BSI_Express_DS_web_datasheet.pdf (rev. 2024-08-20, sha256 1c867b6f): camera modes table,
+      read noise 1.6 e- (median/rms not stated)'
+    note: ''
+read_noise_median_e:
+  value: 1.6
+  unit: e-
+  prov: USER
+  pointer: 'USER PDF Prime_BSI_Express_DS_web_datasheet.pdf (rev. 2024-08-20, sha256 1c867b6f): ''1.6 e-'' (statistic
+    not stated)'
+  note: ''
+read_noise_rms_e:
+  value: 1.6
+  unit: e-
+  prov: PLACEHOLDER
+  pointer: ''
+  note: rms not stated; tail unknown; swept
+adc:
+  gain_e_per_adu:
+    value: 5.0
+    unit: e-/ADU
+    prov: PLACEHOLDER
+    pointer: ''
+    note: not stated; ~full well / 2^bits
+  adc_bits:
+    value: 11
+    unit: bit
+    prov: USER
+    pointer: 'USER PDF Prime_BSI_Express_DS_web_datasheet.pdf (rev. 2024-08-20, sha256 1c867b6f): bit depth 11-bit'
+    note: ''
+  full_well_e:
+    value: 10000
+    unit: e-
+    prov: USER
+    pointer: 'USER PDF Prime_BSI_Express_DS_web_datasheet.pdf (rev. 2024-08-20, sha256 1c867b6f): full well 10000
+      e-'
+    note: ''
+  offset_adu:
+    value: 100
+    unit: ADU
+    prov: PLACEHOLDER
+    pointer: ''
+    note: not stated
+dark:
+  D_ref:
+    value: 1.5
+    unit: e-/px/s
+    prov: USER
+    pointer: 'USER PDF Prime_BSI_Express_DS_web_datasheet.pdf (rev. 2024-08-20, sha256 1c867b6f): camera modes table,
+      1.5 e-/p/s at 0 C (air)'
+    note: ''
+  T_ref_K:
+    value: 273.15
+    unit: K
+    prov: USER
+    pointer: 'USER PDF Prime_BSI_Express_DS_web_datasheet.pdf (rev. 2024-08-20, sha256 1c867b6f): camera modes table,
+      1.5 e-/p/s at 0 C (air)'
+    note: ''
+  Ea_eV:
+    value: 0.2933
+    unit: eV
+    prov: DERIVED
+    pointer: two-point fit 0.5 @ -20 C (cooling options line) and 1.5 @ 0 C (modes table); different tables
+    note: ''
+  T_op_K:
+    value: 273.15
+    unit: K
+    prov: USER
+    pointer: 'USER PDF Prime_BSI_Express_DS_web_datasheet.pdf (rev. 2024-08-20, sha256 1c867b6f): camera modes table,
+      1.5 e-/p/s at 0 C (air)'
+    note: ''
+emccd: null
+pixel_pitch_um:
+  value: 6.5
+  unit: um
+  prov: USER
+  pointer: 'USER PDF Prime_BSI_Express_DS_web_datasheet.pdf (rev. 2024-08-20, sha256 1c867b6f): 6.5 x 6.5 um'
+  note: ''
+mtf: null
+shutter:
+  type: rolling
+  line_time_us:
+    value: 5.14
+    unit: us
+    prov: USER
+    pointer: 'USER PDF Prime_BSI_Express_DS_web_datasheet.pdf (rev. 2024-08-20, sha256 1c867b6f): line time 5.14
+      us/line'
+    note: ''
+  frame_time_ms:
+    value: 10.53
+    unit: ms
+    prov: USER
+    pointer: 'USER PDF Prime_BSI_Express_DS_web_datasheet.pdf (rev. 2024-08-20, sha256 1c867b6f): 95 fps full frame'
+    note: ''
+  n_rows: 2048
+cosmic:
+  rate_per_cm2_s:
+    value: 0.0167
+    unit: cm^-2 s^-1
+    prov: PLACEHOLDER
+    pointer: ''
+    note: sea-level muon flux ~1 cm^-2 min^-1, recalled
+  deposit_e_per_um:
+    value: 80
+    unit: e-/um
+    prov: PLACEHOLDER
+    pointer: ''
+    note: MIP deposit in Si, recalled
+  thickness_um:
+    value: 10.0
+    unit: um
+    prov: PLACEHOLDER
+    pointer: ''
+    note: sensitive thickness not stated
+qcmos_pnr: false

@@ -1,0 +1,194 @@
+schema_version: '1.0'
+name: ixon888_exf_pc
+camera: Andor iXon Ultra 888 EXF (CCD201)
+mode: EM amplifier 10 MHz, gain 1000, photon_counting
+sensor_type: EMCCD
+notes: ''
+qe:
+  wavelength_nm:
+  - 780.24
+  - 852.35
+  temperature_K:
+  - 293.15
+  values:
+  - - 0.808
+    - 0.608
+  prov:
+    value: 780/852 points
+    unit: ''
+    prov: DATA
+    pointer: USER PDF iXon_Ultra_EMCCD_c.pdf (Andor, sha256 d0b88cd4); same values in iXonUltraSS 1026 R1, digitised
+      from QE chart (EXF curve), iXon Ultra spec sheet; +-1.5% abs; sensor-manufacturer curve at 25 C
+    note: ''
+qe_780:
+  value: 0.808
+  unit: ''
+  prov: DATA
+  pointer: USER PDF iXon_Ultra_EMCCD_c.pdf (Andor, sha256 d0b88cd4); same values in iXonUltraSS 1026 R1, digitised
+    from QE chart (EXF curve), iXon Ultra spec sheet; +-1.5% abs; sensor-manufacturer curve at 25 C
+  note: ''
+qe_852:
+  value: 0.608
+  unit: ''
+  prov: DATA
+  pointer: USER PDF iXon_Ultra_EMCCD_c.pdf (Andor, sha256 d0b88cd4); same values in iXonUltraSS 1026 R1, digitised
+    from QE chart (EXF curve), iXon Ultra spec sheet; +-1.5% abs; sensor-manufacturer curve at 25 C
+  note: ''
+prnu:
+  value: 0.005
+  unit: ''
+  prov: PLACEHOLDER
+  pointer: ''
+  note: not stated
+read_noise:
+  kind: gaussian
+  sigma_e:
+    value: 40.0
+    unit: e- (output amplifier)
+    prov: USER
+    pointer: 'USER PDF iXon_Ultra_EMCCD_c.pdf (Andor, sha256 d0b88cd4); same values in iXonUltraSS 1026 R1: read
+      noise without EM gain 40 e- at 10 MHz'
+    note: ''
+read_noise_median_e:
+  value: 40.0
+  unit: e-
+  prov: USER
+  pointer: 'USER PDF iXon_Ultra_EMCCD_c.pdf (Andor, sha256 d0b88cd4); same values in iXonUltraSS 1026 R1: 10 MHz,
+    without EM'
+  note: ''
+read_noise_rms_e:
+  value: 40.0
+  unit: e-
+  prov: USER
+  pointer: 'USER PDF iXon_Ultra_EMCCD_c.pdf (Andor, sha256 d0b88cd4); same values in iXonUltraSS 1026 R1: 10 MHz,
+    without EM'
+  note: ''
+adc:
+  gain_e_per_adu:
+    value: 10.0
+    unit: e-/ADU (output)
+    prov: PLACEHOLDER
+    pointer: ''
+    note: not stated
+  adc_bits:
+    value: 16
+    unit: bit
+    prov: USER
+    pointer: 'USER PDF iXon_Ultra_EMCCD_c.pdf (Andor, sha256 d0b88cd4); same values in iXonUltraSS 1026 R1: digitization
+      16-bit'
+    note: ''
+  full_well_e:
+    value: 80000
+    unit: e-
+    prov: USER
+    pointer: 'USER PDF iXon_Ultra_EMCCD_c.pdf (Andor, sha256 d0b88cd4); same values in iXonUltraSS 1026 R1: active
+      area pixel well depth 80,000 e-'
+    note: ''
+  offset_adu:
+    value: 100
+    unit: ADU
+    prov: PLACEHOLDER
+    pointer: ''
+    note: ''
+dark:
+  D_ref:
+    value: 0.00025
+    unit: e-/px/s
+    prov: USER
+    pointer: 'USER PDF iXon_Ultra_EMCCD_c.pdf (Andor, sha256 d0b88cd4); same values in iXonUltraSS 1026 R1: dark
+      current 0.00025 e-/px/s @ -80 C'
+    note: ''
+  T_ref_K:
+    value: 193.14999999999998
+    unit: K
+    prov: USER
+    pointer: 'USER PDF iXon_Ultra_EMCCD_c.pdf (Andor, sha256 d0b88cd4); same values in iXonUltraSS 1026 R1: dark
+      current 0.00025 e-/px/s @ -80 C'
+    note: ''
+  Ea_eV:
+    value: 0.6
+    unit: eV
+    prov: PLACEHOLDER
+    pointer: ''
+    note: single vendor point; P4 to supply D(T)
+  T_op_K:
+    value: 193.14999999999998
+    unit: K
+    prov: USER
+    pointer: 'USER PDF iXon_Ultra_EMCCD_c.pdf (Andor, sha256 d0b88cd4); same values in iXonUltraSS 1026 R1: dark
+      current 0.00025 e-/px/s @ -80 C'
+    note: ''
+emccd:
+  em_gain:
+    value: 1000
+    unit: ''
+    prov: USER
+    pointer: 'USER PDF iXon_Ultra_EMCCD_c.pdf (Andor, sha256 d0b88cd4); same values in iXonUltraSS 1026 R1: EM gain
+      1-1000'
+    note: ''
+  cic:
+    value: 0.005
+    unit: events/px/frame
+    prov: USER
+    pointer: 'USER PDF iXon_Ultra_EMCCD_c.pdf (Andor, sha256 d0b88cd4); same values in iXonUltraSS 1026 R1: spurious
+      background 0.005 events/pix @1000x, -85 C (footnote: -95 C, 30 MHz, 10 ms); includes dark'
+    note: ''
+  n_stages:
+    value: 604
+    unit: ''
+    prov: PLACEHOLDER
+    pointer: ''
+    note: CCD201 register length not stated; recalled
+  cic_register_fraction:
+    value: 0.5
+    unit: ''
+    prov: PLACEHOLDER
+    pointer: ''
+    note: split of CIC between parallel and register; swept 0-1
+  register_model: stagewise
+  mode: photon_counting
+  pc_threshold_sigma: 5.0
+pixel_pitch_um:
+  value: 13.0
+  unit: um
+  prov: USER
+  pointer: 'USER PDF iXon_Ultra_EMCCD_c.pdf (Andor, sha256 d0b88cd4); same values in iXonUltraSS 1026 R1: 13 x 13
+    um'
+  note: ''
+mtf: null
+shutter:
+  type: global
+  line_time_us:
+    value: 0.0
+    unit: us
+    prov: PLACEHOLDER
+    pointer: ''
+    note: frame transfer
+  frame_time_ms:
+    value: 38.46
+    unit: ms
+    prov: USER
+    pointer: 'USER PDF iXon_Ultra_EMCCD_c.pdf (Andor, sha256 d0b88cd4); same values in iXonUltraSS 1026 R1: 26 fps
+      full frame at 30 MHz'
+    note: ''
+  n_rows: 1024
+cosmic:
+  rate_per_cm2_s:
+    value: 0.0167
+    unit: cm^-2 s^-1
+    prov: PLACEHOLDER
+    pointer: ''
+    note: sea-level muon flux ~1 cm^-2 min^-1, recalled
+  deposit_e_per_um:
+    value: 80
+    unit: e-/um
+    prov: PLACEHOLDER
+    pointer: ''
+    note: MIP deposit in Si, recalled
+  thickness_um:
+    value: 10.0
+    unit: um
+    prov: PLACEHOLDER
+    pointer: ''
+    note: sensitive thickness not stated
+qcmos_pnr: false

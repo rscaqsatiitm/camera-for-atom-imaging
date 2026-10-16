@@ -1,0 +1,9 @@
+# Camera-only Sobol problem (SALib). Same camera-side ranges as sobol_problem.yaml; NA and loss per photon
+# are not sampled and stay at the reference values (NA 0.55, p_loss 2.35e-8, configs/production/reference_cs.yaml).
+parameters:
+  qe:                {range: [0.2, 0.95]}
+  read_median_e:     {range: [0.1, 4.0], log: true}
+  tail_fraction:     {range: [0.0, 0.05]}
+  px_per_fwhm:       {range: [0.35, 2.0], log: true}
+  bg_scale:          {range: [0.1, 3.0], log: true}
+  dark_e_per_px_s:   {range: [0.001, 3.0], log: true}

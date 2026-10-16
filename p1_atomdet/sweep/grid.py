@@ -81,6 +81,13 @@ def run(cfg: dict, out: Path, workers: int = 1, shard: tuple[int, int] = (0, 1),
             "remaining": sum(not _point_file(out, i).exists() for i in range(len(pts)))}
 
 
+def _arr(vals):
+    try:
+        return np.array(vals, float)
+    except (TypeError, ValueError):
+        return np.array([str(x) for x in vals], dtype="S")
+
+
 def collect(cfg: dict, out: Path) -> Path:
     pts = grid_points(cfg)
     recs = []
@@ -92,8 +99,9 @@ def collect(cfg: dict, out: Path) -> Path:
         raise RuntimeError("no finished points")
     keys = sorted(recs[0]["result"].keys())
     data = {"index": np.array([r["index"] for r in recs]),
-            "params": {k: np.array([r["point"][k] for r in recs], float) for k in recs[0]["point"]},
-            "results": {k: np.array([r["result"].get(k, np.nan) for r in recs], float) for k in keys},
+            "params": {k: _arr([r["point"][k] for r in recs]) for k in recs[0]["point"]},
+            "results": {k: np.array([np.nan if r["result"].get(k) is None else r["result"].get(k, np.nan) for r in recs], float)
+                        for k in sorted({kk for r in recs for kk in r["result"]})},
             "cost": {k: np.array([r["cost"][k] for r in recs], float) for k in recs[0]["cost"]}}
     return save_h5(out / f"{cfg['name']}.h5", data, cfg, attrs={"n_points": len(pts), "n_done": len(recs),
                                                                "cpu_h_total": float(data["cost"]["cpu_h"].sum())})

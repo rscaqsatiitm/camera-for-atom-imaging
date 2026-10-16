@@ -1,0 +1,43 @@
+{
+ "name": "prod_sensitivity",
+ "seed": 5007,
+ "evaluator": "p1_atomdet.sweep.evaluate:production_sensitivity_point",
+ "fixed": {
+  "scenario_file": "configs/production/reference_cs.yaml",
+  "targets": [
+   0.001,
+   0.0001
+  ],
+  "eps_at_ms": [
+   40
+  ],
+  "pc_frame_rate_hz": 670.0,
+  "p_loss_high": {
+   "value": 5.6e-07,
+   "unit": "",
+   "prov": "DERIVED",
+   "pointer": "Picken et al. arXiv:1709.00946v2: retention > 99% per 40 ms image at 450 photons/ms -> p <= 0.01/18000"
+  }
+ },
+ "axes": {
+  "case": [
+   "base_bsi",
+   "bsi_tail2pct",
+   "bsi_qe_lo",
+   "bsi_qe_hi",
+   "bsi_loss_high",
+   "base_q2pnr",
+   "q2pnr_loss_high",
+   "ixon_pc_freg0",
+   "ixon_pc_freg1",
+   "ixon_an_freg0",
+   "ixon_an_freg1",
+   "base_bfs",
+   "bfs_loss_high"
+  ],
+  "px_per_fwhm": [
+   0.5,
+   1.0
+  ]
+ }
+}

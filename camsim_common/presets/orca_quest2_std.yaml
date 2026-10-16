@@ -1,0 +1,169 @@
+schema_version: '1.0'
+name: orca_quest2_std
+camera: Hamamatsu ORCA-Quest 2 C15550-22UP
+mode: standard scan
+sensor_type: qCMOS
+notes: ''
+qe:
+  wavelength_nm:
+  - 780.24
+  - 852.35
+  temperature_K:
+  - 293.15
+  values:
+  - - 0.48
+    - 0.384
+  prov:
+    value: 780/852 points
+    unit: ''
+    prov: DATA
+    pointer: USER PDF SCAS0166E03 ORCA-Quest 2 C15550-22UP (Jun. 2026, sha256 8497f943), digitised from QE curve
+      p.6 [printed p.11] of SCAS0166E03 (300 dpi; anchors 460 nm 84.7/85, 900 nm 29.5/30); +-1.5% abs
+    note: ''
+qe_780:
+  value: 0.48
+  unit: ''
+  prov: DATA
+  pointer: USER PDF SCAS0166E03 ORCA-Quest 2 C15550-22UP (Jun. 2026, sha256 8497f943), digitised from QE curve p.6
+    [printed p.11] of SCAS0166E03 (300 dpi; anchors 460 nm 84.7/85, 900 nm 29.5/30); +-1.5% abs
+  note: ''
+qe_852:
+  value: 0.384
+  unit: ''
+  prov: DATA
+  pointer: USER PDF SCAS0166E03 ORCA-Quest 2 C15550-22UP (Jun. 2026, sha256 8497f943), digitised from QE curve p.6
+    [printed p.11] of SCAS0166E03 (300 dpi; anchors 460 nm 84.7/85, 900 nm 29.5/30); +-1.5% abs
+  note: ''
+prnu:
+  value: 0.001
+  unit: ''
+  prov: USER
+  pointer: 'USER PDF SCAS0166E03 ORCA-Quest 2 C15550-22UP (Jun. 2026, sha256 8497f943), spec table: PRNU <0.1% (upper
+    bound used)'
+  note: ''
+read_noise:
+  kind: empirical_sigma_cdf
+  sigma_e:
+  - 0.39
+  - 1.17
+  cdf:
+  - 0.9730440499671269
+  - 1.0
+  prov:
+    value: core 0.39 e-, 0.0270 of pixels at 1.17 e-
+    unit: ''
+    prov: DERIVED
+    pointer: 'matches median 0.39 and rms 0.43 (USER PDF SCAS0166E03 ORCA-Quest 2 C15550-22UP (Jun. 2026, sha256
+      8497f943), spec table: standard scan 0.43 e- rms, 0.39 e- median); tail shape assumed 3x median'
+    note: ''
+read_noise_median_e:
+  value: 0.39
+  unit: e-
+  prov: USER
+  pointer: USER PDF SCAS0166E03 ORCA-Quest 2 C15550-22UP (Jun. 2026, sha256 8497f943), spec table
+  note: ''
+read_noise_rms_e:
+  value: 0.43
+  unit: e-
+  prov: USER
+  pointer: USER PDF SCAS0166E03 ORCA-Quest 2 C15550-22UP (Jun. 2026, sha256 8497f943), spec table
+  note: ''
+adc:
+  gain_e_per_adu:
+    value: 0.107
+    unit: e-/ADU
+    prov: SOURCE
+    pointer: 'SOURCE Hamamatsu C15550-22UP instruction manual B9200301-02 Ver.1.2 (Mar. 2025): conversion factor
+      0.107 e-/count'
+    note: ''
+  adc_bits:
+    value: 16
+    unit: bit
+    prov: USER
+    pointer: 'USER PDF SCAS0166E03 ORCA-Quest 2 C15550-22UP (Jun. 2026, sha256 8497f943): digital output 16/12/8
+      bit'
+    note: ''
+  full_well_e:
+    value: 7000
+    unit: e-
+    prov: USER
+    pointer: 'USER PDF SCAS0166E03 ORCA-Quest 2 C15550-22UP (Jun. 2026, sha256 8497f943): full well 7000 e-'
+    note: ''
+  offset_adu:
+    value: 200
+    unit: ADU
+    prov: SOURCE
+    pointer: 'SOURCE Hamamatsu C15550-22UP instruction manual B9200301-02 Ver.1.2 (Mar. 2025): dark offset 200 counts'
+    note: ''
+dark:
+  D_ref:
+    value: 0.016
+    unit: e-/px/s
+    prov: USER
+    pointer: 'USER PDF SCAS0166E03 ORCA-Quest 2 C15550-22UP (Jun. 2026, sha256 8497f943): forced-air cooled -20
+      C, 0.016 e-/px/s'
+    note: ''
+  T_ref_K:
+    value: 253.14999999999998
+    unit: K
+    prov: USER
+    pointer: 'USER PDF SCAS0166E03 ORCA-Quest 2 C15550-22UP (Jun. 2026, sha256 8497f943): forced-air cooled -20
+      C, 0.016 e-/px/s'
+    note: ''
+  Ea_eV:
+    value: 0.308
+    unit: eV
+    prov: DERIVED
+    pointer: two-point fit 0.006 @ -35 C and 0.016 @ -20 C (SCAS0166E03)
+    note: ''
+  T_op_K:
+    value: 253.14999999999998
+    unit: K
+    prov: USER
+    pointer: 'USER PDF SCAS0166E03 ORCA-Quest 2 C15550-22UP (Jun. 2026, sha256 8497f943): forced-air cooled -20
+      C, 0.016 e-/px/s'
+    note: ''
+emccd: null
+pixel_pitch_um:
+  value: 4.6
+  unit: um
+  prov: USER
+  pointer: 'USER PDF SCAS0166E03 ORCA-Quest 2 C15550-22UP (Jun. 2026, sha256 8497f943): pixel size 4.6 um'
+  note: ''
+mtf: null
+shutter:
+  type: rolling
+  line_time_us:
+    value: 3.6
+    unit: us
+    prov: DERIVED
+    pointer: 'SOURCE Hamamatsu C15550-22UP instruction manual B9200301-02 Ver.1.2 (Mar. 2025): 1H = 7.2 us per row
+      pair -> 3.6 us per row'
+    note: ''
+  frame_time_ms:
+    value: 8.33
+    unit: ms
+    prov: USER
+    pointer: 'USER PDF SCAS0166E03 ORCA-Quest 2 C15550-22UP (Jun. 2026, sha256 8497f943): 120 fps full frame CoaXPress'
+    note: ''
+  n_rows: 2304
+cosmic:
+  rate_per_cm2_s:
+    value: 0.0167
+    unit: cm^-2 s^-1
+    prov: PLACEHOLDER
+    pointer: ''
+    note: sea-level muon flux ~1 cm^-2 min^-1, recalled
+  deposit_e_per_um:
+    value: 80
+    unit: e-/um
+    prov: PLACEHOLDER
+    pointer: ''
+    note: MIP deposit in Si, recalled
+  thickness_um:
+    value: 10.0
+    unit: um
+    prov: PLACEHOLDER
+    pointer: ''
+    note: sensitive thickness not stated
+qcmos_pnr: false

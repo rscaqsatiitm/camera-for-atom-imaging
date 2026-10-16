@@ -1,0 +1,170 @@
+schema_version: '1.0'
+name: orca_fusion_bt_uq
+camera: Hamamatsu ORCA-Fusion BT C15440-20UP
+mode: ultra quiet scan
+sensor_type: sCMOS
+notes: ''
+qe:
+  wavelength_nm:
+  - 780.24
+  - 852.35
+  temperature_K:
+  - 293.15
+  values:
+  - - 0.646
+    - 0.464
+  prov:
+    value: 780/852 points
+    unit: ''
+    prov: DATA
+    pointer: SOURCE Hamamatsu SCAS0143E03 ORCA-Fusion BT brochure (Jun. 2026), digitised from QE curve p.5 of SCAS0143E03
+      (anchors 800 nm 58.9 vs printed 58); +-2% abs
+    note: ''
+qe_780:
+  value: 0.646
+  unit: ''
+  prov: DATA
+  pointer: SOURCE Hamamatsu SCAS0143E03 ORCA-Fusion BT brochure (Jun. 2026), digitised from QE curve p.5 of SCAS0143E03
+    (anchors 800 nm 58.9 vs printed 58); +-2% abs
+  note: ''
+qe_852:
+  value: 0.464
+  unit: ''
+  prov: DATA
+  pointer: SOURCE Hamamatsu SCAS0143E03 ORCA-Fusion BT brochure (Jun. 2026), digitised from QE curve p.5 of SCAS0143E03
+    (anchors 800 nm 58.9 vs printed 58); +-2% abs
+  note: ''
+prnu:
+  value: 0.0006
+  unit: ''
+  prov: SOURCE
+  pointer: 'SOURCE Hamamatsu ORCA-Fusion BT instruction manual B0850301-05 Ver.1.5 (Oct. 2025) p.80: PRNU 0.06%
+    rms'
+  note: ''
+read_noise:
+  kind: empirical_sigma_cdf
+  sigma_e:
+  - 0.6
+  - 1.7999999999999998
+  cdf:
+  - 0.9548611111111112
+  - 1.0
+  prov:
+    value: core 0.6 e-, 0.0451 of pixels at 1.80 e-
+    unit: ''
+    prov: DERIVED
+    pointer: 'matches median 0.6 and rms 0.7 (SOURCE Hamamatsu ORCA-Fusion BT instruction manual B0850301-05 Ver.1.5
+      (Oct. 2025) p.80: ultra quiet 0.6 median, 0.7 rms); tail shape assumed 3x median'
+    note: ''
+read_noise_median_e:
+  value: 0.6
+  unit: e-
+  prov: SOURCE
+  pointer: SOURCE Hamamatsu ORCA-Fusion BT instruction manual B0850301-05 Ver.1.5 (Oct. 2025) p.80
+  note: ''
+read_noise_rms_e:
+  value: 0.7
+  unit: e-
+  prov: SOURCE
+  pointer: SOURCE Hamamatsu ORCA-Fusion BT instruction manual B0850301-05 Ver.1.5 (Oct. 2025) p.80
+  note: ''
+adc:
+  gain_e_per_adu:
+    value: 0.24
+    unit: e-/ADU
+    prov: SOURCE
+    pointer: 'SOURCE Hamamatsu ORCA-Fusion BT instruction manual B0850301-05 Ver.1.5 (Oct. 2025) p.80: conversion
+      factor 0.24'
+    note: ''
+  adc_bits:
+    value: 16
+    unit: bit
+    prov: SOURCE
+    pointer: 'SOURCE Hamamatsu ORCA-Fusion BT instruction manual B0850301-05 Ver.1.5 (Oct. 2025) p.81: digital output
+      16 bit'
+    note: ''
+  full_well_e:
+    value: 15000
+    unit: e-
+    prov: SOURCE
+    pointer: SOURCE Hamamatsu ORCA-Fusion BT instruction manual B0850301-05 Ver.1.5 (Oct. 2025) p.80
+    note: ''
+  offset_adu:
+    value: 100
+    unit: ADU
+    prov: SOURCE
+    pointer: SOURCE Hamamatsu ORCA-Fusion BT instruction manual B0850301-05 Ver.1.5 (Oct. 2025) p.80
+    note: ''
+dark:
+  D_ref:
+    value: 0.7
+    unit: e-/px/s
+    prov: SOURCE
+    pointer: 'SOURCE Hamamatsu ORCA-Fusion BT instruction manual B0850301-05 Ver.1.5 (Oct. 2025) p.80: 0.7 e-/px/s
+      at -15 C'
+    note: ''
+  T_ref_K:
+    value: 258.15
+    unit: K
+    prov: SOURCE
+    pointer: 'SOURCE Hamamatsu ORCA-Fusion BT instruction manual B0850301-05 Ver.1.5 (Oct. 2025) p.80: 0.7 e-/px/s
+      at -15 C'
+    note: ''
+  Ea_eV:
+    value: 0.2667
+    unit: eV
+    prov: DERIVED
+    pointer: two-point fit 0.7 @ -15 C and 1.0 @ -8 C
+    note: ''
+  T_op_K:
+    value: 258.15
+    unit: K
+    prov: SOURCE
+    pointer: 'SOURCE Hamamatsu ORCA-Fusion BT instruction manual B0850301-05 Ver.1.5 (Oct. 2025) p.80: 0.7 e-/px/s
+      at -15 C'
+    note: ''
+emccd: null
+pixel_pitch_um:
+  value: 6.5
+  unit: um
+  prov: SOURCE
+  pointer: SOURCE Hamamatsu ORCA-Fusion BT instruction manual B0850301-05 Ver.1.5 (Oct. 2025) p.80
+  note: ''
+mtf: null
+shutter:
+  type: rolling
+  line_time_us:
+    value: 80.0
+    unit: us
+    prov: SOURCE
+    pointer: 'SOURCE Hamamatsu ORCA-Fusion BT instruction manual B0850301-05 Ver.1.5 (Oct. 2025) p.36: 1H = 80.0
+      us (ultra quiet)'
+    note: ''
+  frame_time_ms:
+    value: 184.4
+    unit: ms
+    prov: SOURCE
+    pointer: 'SOURCE Hamamatsu ORCA-Fusion BT instruction manual B0850301-05 Ver.1.5 (Oct. 2025) p.81: readout 184.4
+      ms'
+    note: ''
+  n_rows: 2304
+cosmic:
+  rate_per_cm2_s:
+    value: 0.0167
+    unit: cm^-2 s^-1
+    prov: PLACEHOLDER
+    pointer: ''
+    note: sea-level muon flux ~1 cm^-2 min^-1, recalled
+  deposit_e_per_um:
+    value: 80
+    unit: e-/um
+    prov: PLACEHOLDER
+    pointer: ''
+    note: MIP deposit in Si, recalled
+  thickness_um:
+    value: 10.0
+    unit: um
+    prov: PLACEHOLDER
+    pointer: ''
+    note: sensitive thickness not stated
+qcmos_pnr: false
