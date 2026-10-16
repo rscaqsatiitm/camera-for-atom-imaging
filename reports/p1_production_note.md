@@ -65,8 +65,8 @@ transmission 0.327 after collection (2.7% of scattered photons to the camera, as
 2.35e-8 per scattered photon (V1 survival, includes vacuum loss), site-to-site rate spread 12.3%
 (V1 Fig. 4d), background 4.76 e-/px/s at the V1 pixel (0.902 um object plane, QE 0.44) scaled
 with object-plane pixel area and QE, filling 0.5. Assumptions: (i) diffraction-limited vectorial
-PSF at NA 0.55 (the measured V1 PSF was about 35% wider, so absolute times here are optimistic and
-the best sampling would shift up by the same factor); (ii) uniform background; (iii) no neighbour
+PSF at NA 0.55 (FWHM 0.82 um; the measured V1 PSF has FWHM 1.70 um, 2.1 times wider, so absolute
+times here are optimistic and the best sampling in px per FWHM shifts up); (ii) uniform background; (iii) no neighbour
 crosstalk (spacing large compared with the PSF); (iv) read-noise tails, where a vendor gives median
 and rms, are a two-class model with tail pixels at 3x the median (presets) or 5x (generic sweep);
 P4 will replace these with measured distributions; (v) dark current at the vendor's stated
