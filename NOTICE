@@ -1,0 +1,26 @@
+camera-for-atom-imaging
+CAQSAT lab, Department of Physics, IIT Madras.
+
+This repository includes third-party material listed below.
+
+-------------------------------------------------------------------------------
+BootLoops skills 1.0
+https://github.com/BootLoops-ai/skills, commit ca892277dcf0468d995f0036f3bd6d753a8afe7d
+Copyright (c) 2026 Anthropic, PBC. Created by Matthew D. Schwartz.
+
+Vendored files (unmodified):
+  .claude/skills/planted-truth/SKILL.md
+  .claude/skills/acceptance-gate/SKILL.md
+  .claude/skills/independence-bookkeeping/SKILL.md
+  .claude/skills/timing-discipline/SKILL.md
+
+Skill text: Creative Commons Attribution 4.0 International (CC BY 4.0),
+  https://creativecommons.org/licenses/by/4.0/legalcode
+  Attribution as requested upstream: "BootLoops 1.0, Anthropic, PBC and
+  Matthew D. Schwartz (2026), https://www.bootloops.ai".
+Scripts and plugin manifests: MIT License. No upstream scripts are vendored
+  here (the four skills consist of SKILL.md only); the MIT text is kept for
+  completeness.
+Upstream licence and notice files: .claude/skills/third_party_licenses/
+Upstream commit and file hashes: .claude/skills/UPSTREAM.md
+-------------------------------------------------------------------------------
