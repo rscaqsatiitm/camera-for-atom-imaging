@@ -73,6 +73,11 @@ def test_wrong_threshold_fails_mc_check_cmos(kind):
     _assert_control(r, out)
 
 
+@pytest.mark.xfail(strict=True, reason=(
+    "Recorded 2026-11-19 (reports/check_breaks.md, finding F1): the registered perturbation is a no-op here. "
+    "In photon-counting mode the score is an integer click count; T_opt = 2.000 and T_low = 1.710 make the "
+    "same decisions (identical MC counts), because 0.10 x separation = 0.29 click < 1 click. T_high fails "
+    "the check as it should. Not changed after the result (CLAUDE.md rule 10); a replacement control is a PI decision."))
 def test_wrong_threshold_fails_mc_check_emccd_box():
     """Site, readout, seed and n as in tests/test_counts.py::test_emccd_lattice_vs_mc."""
     ro = EMCCDReadout(em_gain=300, n_stages=512, cic=0.005, cic_register_fraction=0.5, sigma_ro_e=40.0,
