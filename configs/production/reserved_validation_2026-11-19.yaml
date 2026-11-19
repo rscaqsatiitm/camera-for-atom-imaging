@@ -1,0 +1,97 @@
+# Reserved validation points and pass criteria for the production Sobol sweeps
+# (configs/production/sobol.yaml, 10240 rows; configs/production/sobol_camera.yaml, 8192 rows).
+# Written 2026-11-19 and committed before the remaining rows of either design are run
+# (CLAUDE.md rules 10 and 13). Do not edit criteria after any reserved point has been evaluated;
+# append a dated amendment instead.
+#
+# Status at writing (disclosed, not hidden):
+#  - The nested N = 256 prefixes were already evaluated before this file existed: rows 0-2559 of
+#    sobol.yaml and rows 0-2047 of sobol_camera.yaml (runs/production/sweeps_measpsf.log), and their
+#    indices were read (reports/p1_sobol_interim_n256.md, reports/p1_sobol_camera_n256.md). This file
+#    therefore precedes only the remaining rows. The reserved points below are new, never evaluated,
+#    and are not rows of either design (smallest normalised distance to a design row: 0.11).
+#  - No held-out MEASURED data exist for the production sweep. The reference scenario is anchored on
+#    V1 (reports/contact_log_v1_v2.md, entries P-1 to P-6), so V1 cannot validate it. The reserved
+#    points are validated against independent numerical routes and grid refinement, not against data.
+#  - The checker for R1 to R3 is not yet written. It must pass its own negative control (R5) before
+#    its output on the reserved points is read.
+#  - Timing (CLAUDE.md rule 14): the cost figures in runs/production/slurm_submit_measpsf.sh were
+#    measured in the cloud container. A pilot on the cluster is required before full submission.
+
+date: 2026-11-19
+generator:
+  random_points: "numpy.random.default_rng(20261119), numpy 2.5.3; per parameter u ~ U(0,1) mapped to the range of the
+    problem file (log-uniform where log: true), camera design drawn first (6 points), then the 8-parameter design (6 points);
+    values rounded to 4 significant digits; the rounded values are the definition"
+  corner_points: "chosen by rule before any evaluation: best camera, worst camera, under-sampled, over-sampled with
+    maximal read-noise tail; NA and loss at their extremes (best, worst) or at the reference (0.55, 2.35e-8)"
+
+camera_design:            # configs/production/sobol_camera_problem.yaml; fixed block of sobol_camera.yaml
+  config: configs/production/sobol_camera.yaml
+  columns: [qe, read_median_e, tail_fraction, px_per_fwhm, bg_scale, dark_e_per_px_s]
+  random:
+    - [0.2685, 0.2922, 0.02852, 0.5323, 0.2803, 0.05968]
+    - [0.9421, 1.246, 0.01883, 1.783, 0.1119, 0.018]
+    - [0.9439, 0.1567, 0.0359, 1.417, 0.1256, 0.004788]
+    - [0.5981, 0.1686, 0.012, 1.229, 0.2854, 2.625]
+    - [0.8374, 0.1147, 0.002455, 0.5946, 1.423, 0.04752]
+    - [0.4476, 0.53, 0.04348, 0.4306, 0.9574, 0.07344]
+  corners:
+    best:          [0.95, 0.1, 0.0, 1.0, 0.1, 0.001]
+    worst:         [0.2, 4.0, 0.05, 0.35, 3.0, 3.0]
+    under_sampled: [0.5, 1.0, 0.0, 0.35, 1.0, 0.01]
+    over_tail:     [0.5, 1.0, 0.05, 2.0, 1.0, 0.01]
+
+full_design:              # configs/production/sobol_problem.yaml; fixed block of sobol.yaml
+  config: configs/production/sobol.yaml
+  columns: [qe, read_median_e, tail_fraction, px_per_fwhm, bg_scale, dark_e_per_px_s, na, p_loss_per_photon]
+  random:
+    - [0.3462, 0.2735, 0.0183, 1.179, 0.1109, 0.7338, 0.5843, 8.537e-08]
+    - [0.5972, 1.392, 0.001818, 1.942, 2.099, 1.187, 0.6656, 6.853e-08]
+    - [0.2254, 0.5139, 0.03787, 1.563, 0.1176, 0.02055, 0.3282, 1.768e-07]
+    - [0.7327, 0.2555, 0.002316, 0.9185, 0.3561, 0.02016, 0.3089, 3.825e-09]
+    - [0.4297, 0.1411, 0.03681, 1.287, 0.1094, 2.046, 0.5815, 1.117e-08]
+    - [0.8068, 0.2181, 0.02219, 0.6836, 0.3017, 0.001454, 0.6749, 1.885e-07]
+  corners:
+    best:          [0.95, 0.1, 0.0, 1.0, 0.1, 0.001, 0.8, 2.0e-09]
+    worst:         [0.2, 4.0, 0.05, 0.35, 3.0, 3.0, 0.3, 6.0e-07]
+    under_sampled: [0.5, 1.0, 0.0, 0.35, 1.0, 0.01, 0.55, 2.35e-08]
+    over_tail:     [0.5, 1.0, 0.05, 2.0, 1.0, 0.01, 0.55, 2.35e-08]
+
+# Every reserved point is evaluated through the production entry point, p1_atomdet.sweep.evaluate.sobol_point,
+# with the fixed block of its design's config, unchanged (no simplified path).
+criteria:
+  R1_independent_route:
+    what: "brute-force MC (p1_atomdet.counts.mc) against the production CF engine, matched filter"
+    where: "every reserved point, at imaging times 20 ms and 80 ms"
+    production_side: "eps_at(sc, cam, geo, t, 'matched') as called by sobol_point: FP and FN at the reported threshold"
+    mc_side: "for each sub-pixel offset node of the production geometry: the same SiteModel inputs (pixel fractions,
+      background, mu, loss tau, rate spread), the per-offset weights and threshold that eps_at used; FP and FN averaged
+      with the production offset weights; 400000 samples per class per offset node"
+    pass: "predicate tests/mc_compare.py::mc_agrees(kind='matched') with the Clopper-Pearson level raised to
+      1 - 0.05/M (Bonferroni, family-wise 95%), M = number of testable comparisons (FP and FN counted separately)"
+    testable_if: "MC expected count (samples x production rate) >= 100; untestable comparisons are listed with their
+      count and are not counted as passes"
+    shared_layers: "pixel fractions and PSF (optics/array.py), SiteModel inputs, TauDistribution, offset nodes and
+      weights, the reported threshold; R1 does not test these (CLAUDE.md, independent route)"
+  R2_digits_grid:
+    what: "stability of log10 t(1e-3) and log10 t(1e-4) under a refined count grid"
+    where: "every reserved point"
+    refinement: "ds 0.02 -> 0.01, Scenario.n_tau 24 -> 48, n_offsets 3 -> 5, all at once, else unchanged"
+    pass: "reached flags identical; for reached targets abs(delta log10 t) <= 0.0043 (1% in t)"
+    reason: "the reports quote main-effect factors to 0.01 and operating-point times to 3 significant figures;
+      numerical error must stay below that"
+  R3_digits_samples:
+    what: "stability of Sobol indices under doubled samples"
+    where: "both designs, outputs log10 t(1e-3) and log10 t(1e-4), after the full N = 1024 run"
+    pass: "for every parameter with S_T(N=1024) >= 0.05: abs(S_T(1024) - S_T(512)) <= the 95% bootstrap half-width
+      of S_T(1024) from SALib; the two parameters with the largest S_T are the same at N = 512 and N = 1024"
+    note: "N = 512 is the nested prefix of the first 512 x (D + 2) rows"
+  R4_denominators:
+    pass: "all 20 reserved points evaluated in R1 and R2 without exception; the checker prints passed / testable / total
+      for each criterion; a missing evaluation is a failure, not a skip"
+  R5_negative_control_of_checker:
+    pass: "before reading R1 to R3 on the reserved points: (a) R1 fails on at least one testable point when the MC
+      applies T +/- 0.10 x (mean score with atom - mean without) instead of the reported threshold (rule of
+      tests/mc_compare.py); (b) R2 fails when 0.01 is added to one refined log10 t; (c) R3 fails when one S_T(512)
+      is shifted by twice its half-width. Record each in reports/check_breaks.md"
