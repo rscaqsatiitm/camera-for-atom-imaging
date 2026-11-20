@@ -102,7 +102,11 @@ def _bg_rate(sc: Scenario, cam: Camera, geo: Geometry) -> float:
     return sc.bg_rate_e_per_px_s * (geo.pitch_m / 0.902e-6) ** 2 * cam.qe / 0.44
 
 
-def eps_at(sc: Scenario, cam: Camera, geo: Geometry, t: float, classifier: str = "matched") -> ErrorRates:
+def eps_at(sc: Scenario, cam: Camera, geo: Geometry, t: float, classifier: str = "matched",
+           details: list | None = None) -> ErrorRates:
+    """Offset-averaged error rates. If `details` is a list, one record per offset node is appended
+    (weight, threshold, fp, fn, CF lattices, site, classifier weights) for independent checks; the
+    returned rates do not depend on it."""
     noise = CFNoise.from_classes(cam.read_classes, gain_kind=cam.gain_kind, f2=cam.f2)
     mu = mu_per_s(sc, cam) * t
     bg = _bg_rate(sc, cam, geo) * t + cam.dark_e_per_px_s * t + cam.cic_per_px
@@ -119,6 +123,9 @@ def eps_at(sc: Scenario, cam: Camera, geo: Geometry, t: float, classifier: str =
         i = int(np.argmin(e))
         fp_curves.append(a * fp[i])
         fn_curves.append(a * fn[i])
+        if details is not None:
+            details.append({"weight": float(a), "threshold": float(T[i]), "fp": float(fp[i]), "fn": float(fn[i]),
+                            "p0": p0, "p1": p1, "site": site, "w": w})
     fp, fn = float(sum(fp_curves)), float(sum(fn_curves))
     return ErrorRates(float("nan"), fp, fn, (1 - sc.filling) * fp + sc.filling * fn, sc.filling)
 
