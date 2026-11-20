@@ -250,9 +250,9 @@ production results use model A.
 
 | item | size | why it is needed |
 |---|---|---|
-| generic CMOS sweep with the measured PSF | 725 of 750 points left, at most 19 CPU-h | spec-to-fidelity maps in the (QE, read noise) plane consistent with Table 2; the existing maps use the diffraction-limited PSF |
-| full 8-parameter Sobol, N = 1024 | 7680 points left, at most about 60 CPU-h | halves the confidence intervals; separates NA, loss and read noise at 1e-4 |
-| full camera-only Sobol, N = 1024 | 6144 points left, at most about 30 CPU-h | final ranking of camera parameters for the specification |
+| generic CMOS sweep with the measured PSF | 725 of 750 points left, about 19 CPU-h at the mean measured cost | spec-to-fidelity maps in the (QE, read noise) plane consistent with Table 2; the existing maps use the diffraction-limited PSF |
+| full 8-parameter Sobol, N = 1024 | 7680 points left, about 61 CPU-h at the mean measured cost | halves the confidence intervals; separates NA, loss and read noise at 1e-4 |
+| full camera-only Sobol, N = 1024 | 6144 points left, about 33 CPU-h at the mean measured cost | final ranking of camera parameters for the specification |
 | Rb at 780 nm, and the Cs/Rb compromise | not started | required by the brief; QE and PSF differ at 780 nm |
 | neighbour crosstalk and array geometry | not started | required by the brief; matters when site spacing approaches the PSF width |
 | Bayesian per-pixel classifier in production | implemented, validated, not yet in the sweeps | can exploit a measured read-noise map, the input that matters most after QE |
