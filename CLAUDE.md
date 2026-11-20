@@ -19,7 +19,8 @@ Each rule cites where it is stated or enforced. Do not weaken any of them.
    lists cannot drift. As of 2026-11-19, `reports/p1_validation.md` lists the 40 entries of the
    validation-stage files (the two validation presets and `configs/validation/`), and
    `reports/p1_production_note.md` lists the 116 entries of the full default scan. Both are checked
-   by `tests/test_placeholder_lists.py`. Do not put `[VALUE?` text or `prov: PLACEHOLDER` into new
+   by `tests/test_placeholder_lists.py`; `p1_atomdet/validation/report.py` scans only the
+   validation-stage files (`VALIDATION_PATHS`), so regenerating the report keeps the 40-entry list. Do not put `[VALUE?` text or `prov: PLACEHOLDER` into new
    files under `configs/` or `camsim_common/presets/` unless the open list is meant to grow.
 4. **Report numbers come from run outputs.** `python -m p1_atomdet.validation.report` writes the
    validation report from `runs/validation/`; SIM entries in provenance ledgers are marked

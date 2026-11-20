@@ -23,7 +23,10 @@ pytest -q -m slow           # brute-force MC and importance-sampling cross-check
 python -m p1_atomdet.validation.run --config configs/validation/v1_manetsch.yaml \
     configs/validation/v2_picken.yaml configs/validation/v3_analytic.yaml configs/validation/convergence.yaml
 python -m p1_atomdet.validation.report          # writes reports/p1_validation.md and figures
-python -m camsim_common.placeholders            # open [VALUE?] list (must match the report)
+python -m camsim_common.placeholders camsim_common/presets/orca_quest_c15550_20up_manetsch.yaml \
+    camsim_common/presets/zyla55_picken_globalshutter_200MHz.yaml configs/validation
+                                                # validation-stage [VALUE?] list (= reports/p1_validation.md)
+python -m camsim_common.placeholders            # full [VALUE?] list (= reports/p1_production_note.md)
 ```
 
 Outputs go to `runs/validation/` (HDF5 with the resolved config and git hash, JSON tables,

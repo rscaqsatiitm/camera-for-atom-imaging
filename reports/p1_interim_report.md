@@ -72,13 +72,14 @@ positions (within 1.1% of a 9 x 9 average).
 | V1 | FN 5.50e-5, FP 7.01e-5, ORCA-Quest, 80 ms (Manetsch et al., arXiv:2403.12021v4) | FN 4.91e-5 (empirical rate spread) to 5.73e-5 (Gaussian); FP 4.85e-6 | FN reproduced; FP 14x low |
 | V1 | dependence on loss-time profile at fixed survival 0.999864 | FN -42% (model B, late losses) to +10% (model B, early escape) relative to model A | quantified |
 | V2 | Zyla 5.5, 40 ms, readout error < 8e-7 (Picken et al., arXiv:1709.00946v2) | fitted gains 0.381 and 0.368 e-/ADU (agree between traps); Poisson readout error 2.9 to 4.0 x their Gaussian estimate (9.55e-7 for trap 1) | reproduced; their bound marginal |
-| V2 | sCMOS vs EMCCD SNR table (their Table I) | all cells to 0.05 except two EMCCD 852 nm cells, consistent with QE 0.55 instead of 0.60 | reproduced |
+| V2 | sCMOS vs EMCCD SNR table (their Table I) | 15 of 18 cells within rounding (0.05); two EMCCD 852 nm cells consistent with QE 0.55 instead of 0.60 (hypothesis); one Zyla cell (QE 0.6, 100 photons/px) off by 0.051, unexplained | reproduced except three cells |
 | V3 | Poisson limit; EMCCD excess noise F^2 -> 2 (Basden et al. 2003) | relative error 4.42e-14; F^2 = 1.972 at gain 1000, 512 stages | pass |
 
 The V1 false-positive excess is visible directly in the digitised histogram: between 32 and 42
 photons the measured background tail lies 2 to 3 times above any Poisson-plus-read-noise model
 consistent with the background width. We read this as a floor set by events outside the camera, for
-example atoms entering during imaging. This has a direct consequence for the present work: at the
+example atoms entering during imaging. This attribution is not tested here, and it was made after
+the residual was seen, so V1 validates the model's FN rate but not its FP rate. This has a direct consequence for the present work: at the
 1e-4 level, a real experiment may be limited by non-camera errors that no camera choice removes.
 
 ## 3. Reference scenario
