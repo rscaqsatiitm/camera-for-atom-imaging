@@ -17,6 +17,27 @@ from .common import ROOT, fmt, md_table
 from .figures import make_all
 
 
+# The validation report covers the validation stage only: its two presets and configs/validation/.
+# Production presets and configs are listed in reports/p1_production_note.md.
+VALIDATION_PATHS = [ROOT / "camsim_common" / "presets" / "orca_quest_c15550_20up_manetsch.yaml",
+                    ROOT / "camsim_common" / "presets" / "zyla55_picken_globalshutter_200MHz.yaml",
+                    ROOT / "configs" / "validation"]
+
+# A residual against a value printed to one decimal is "within rounding" if it is at most half a unit
+# of the last printed digit (criterion stated in the text; fixed a priori, not fitted to the residuals).
+SNR_ROUNDING = 0.05
+
+
+def _n_cells(n: int, kind: str) -> str:
+    words = {1: "one", 2: "two", 3: "three", 4: "four"}
+    return f"{words.get(n, n)} {kind} cell{'' if n == 1 else 's'}"
+
+
+def _snr_cells(rows) -> str:
+    return "; ".join(f"{r['detector']}, QE {r['qe']:g}, {r['n']:g} photons/px ({r['chain'] - r['paper']:+.3f})"
+                     for r in rows)
+
+
 def _load(run_dir, name):
     return json.loads((run_dir / f"{name}.json").read_text())
 
@@ -43,8 +64,9 @@ def build(run_dir: Path, out_md: Path) -> Path:
     fx = v1["fitted"]
     t1, t2 = v2["traps"]["trap1"], v2["traps"]["trap2"]
     snr = v2["snr"]
-    snr_bad = [r for r in snr if abs(r["chain"] - r["paper"]) > 0.06]
-    snr_max_ok = max(abs(r["chain"] - r["paper"]) for r in snr if r not in snr_bad)
+    snr_bad = [r for r in snr if abs(r["chain"] - r["paper"]) > SNR_ROUNDING]
+    snr_bad_emccd = [r for r in snr_bad if r["detector"] == "EMCCD"]
+    snr_bad_other = [r for r in snr_bad if r["detector"] != "EMCCD"]
     emc = v3["emccd"]
     poi_max = max(max(r["rel_fp"], r["rel_fn"]) for r in v3["poisson"])
     psf = {r["NA"]: r for r in v3["psf"]}
@@ -60,8 +82,8 @@ def build(run_dir: Path, out_md: Path) -> Path:
     cost = md_table(["stage", "wall time (s)", "CPU time (s)", "peak RSS (MB)"],
                     [[k, r["wall_s"], r["cpu_s"], r["peak_rss_mb"]] for k, r in last.items()])
 
-    placeholders = open_placeholders()
-    ledger_rows = scan()
+    placeholders = open_placeholders(VALIDATION_PATHS)
+    ledger_rows = scan(VALIDATION_PATHS)
 
     def ratio(a, b_):
         return a / b_
@@ -98,16 +120,17 @@ analytic limits.
    of {1 / ratio(b['fp'], t['fp']):.0f} ({fmt(b['fp'])} against {fmt(t['fp'])}), so the predicted fidelity, {b['fidelity']:.7f}, exceeds the measured
    0.9999374(8). The digitised histogram shows the corresponding excess directly: between 32 and
    42 photons the measured background tail lies 2 to 3 times above any Poisson-plus-read-noise
-   model consistent with the background width. The FP floor of that experiment is therefore set
-   by events outside a camera model (Sec. 3.3), not by the sensor.
+   model consistent with the background width. We attribute this FP floor to events outside a
+   camera model (Sec. 3.3); the attribution is a hypothesis, not tested here.
 2. **Picken et al. (V2, Zyla 5.5, 40 ms).** Fitting only the ADC gain and the background to the
    background peak of each trap gives gains that agree between the two traps
    ({t1['g_e_per_adu']:.3f} and {t2['g_e_per_adu']:.3f} e-/ADU), and trap 1's atom signal then agrees with the stated
    photon budget to {abs(t1['signal_ratio'] - 1) * 100:.0f}% (trap 2 is {(t2['signal_ratio'] - 1) * 100:.0f}% brighter). At the paper's threshold the
    Poisson background gives a readout error {t1['eps_model_at_cmin'] / t1['eps_gauss_paper_eq4']:.1f} and {t2['eps_model_at_cmin'] / t2['eps_gauss_paper_eq4']:.1f} times larger than the paper's Gaussian
    estimate ({fmt(t1['eps_model_at_cmin'])} for trap 1, just above the quoted bound of 8e-7). The SNR table
-   (their Table I) is reproduced cell by cell to {snr_max_ok:.2f} except two cells of the EMCCD 852 nm
-   column (100 and 1000 photons/px), which are consistent with QE = 0.55 rather than the stated 0.60.
+   (their Table I) is reproduced cell by cell within rounding ({SNR_ROUNDING}) except {len(snr_bad)} of {len(snr)} cells:
+   {_snr_cells(snr_bad)}. The {_n_cells(len(snr_bad_emccd), 'EMCCD')} {'is' if len(snr_bad_emccd) == 1 else 'are'} consistent with QE = 0.55 rather than the
+   stated 0.60 (a hypothesis, Sec. 4.3); {_n_cells(len(snr_bad_other), 'other')} exceed{'s' if len(snr_bad_other) == 1 else ''} rounding and {'is' if len(snr_bad_other) == 1 else 'are'} not explained.
 3. **Analytic limits (V3).** Pure Poisson discrimination is reproduced to {fmt(poi_max)} relative error;
    the stage-by-stage EMCCD Monte Carlo reproduces the finite-register excess noise of Basden et al.
    (F^2 = {emc[2]['f2_formula_eq5']:.3f} at gain 1000 and 512 stages, tending to 2); dipole collection, the vectorial PSF and the
@@ -205,7 +228,9 @@ Manetsch et al., digitised from a 400 dpi render (axis calibration on the 0, 100
 ticks; resolution about 0.04 decades). Orange dashed: model mixture (1 - F) P(S|0) + F P(S|1) with
 F = 0.512, background {fx['lambda0_e_per_box']:.2f} e- per box, mu = {fx['mu_e']:.2f} e-, read noise {fx['sigma_read_e']:.3f} e- rms per pixel, ADC step
 0.107 e-, empirical rate distribution (Ext. Data Fig. 4d), model-A loss with S = 0.999864. The
-model is not fitted to this curve.*
+model is not fitted to this curve, but its background level, atom signal and read noise were fitted
+to the means and the background width of the same histogram (Table V1-a), so the position and width
+of each peak agree by construction; only the shape beyond the second moment is a prediction.*
 
 ![V1 error curves]({rel['v1_errors']})
 
@@ -225,9 +250,10 @@ residual vapour), (ii) background that varies between sites or shots with a non-
 and (iii) the three-image model-free estimator attributing some loss-recapture sequences to FP.
 Neighbour crosstalk is negligible at 7.2 um spacing with a 1.5 um waist (the Gaussian tail at
 4 um from the neighbour is ~1e-6 of its light), and cosmic-ray hits on a 7x7 box are ~1e-8 per
-image. We therefore regard V1 as validating the camera-and-atom part of the model (FN, histogram
-shape, no-loss fidelity) and report the FP excess as an experimental floor that the camera
-specification cannot remove.
+image. We attribute the FP excess to events outside a camera model, but this attribution is a
+hypothesis: causes (i) to (iii) are untested here. This scope was set after the FP residual was
+seen, so V1 counts as a validation of the model's FN rate and of the histogram shape beyond the
+fitted moments, not of its FP rate (`reports/contact_log_v1_v2.md`, V1-4 and V1-7).
 
 ### 3.4 Sensitivity to the loss model and to the rate distribution
 
@@ -239,7 +265,9 @@ and only the normalised loss-time shape was transferred to the measured survival
 distribution matters at the same level: replacing the empirical Fig. 4d histogram by a Gaussian of
 the same mean and width raises FN from {fmt(b['fn'])} to {fmt(g['fn'])}, because a Gaussian puts more sites in the
 low-rate tail than the histogram shows. Without loss the box classifier reaches F = {nl['fidelity']:.6f},
-consistent with the paper's lossy-Poisson estimate of 0.99999(1) for zero loss; the matched filter
+consistent with the paper's lossy-Poisson estimate of 0.99999(1) for zero loss. That estimate is the
+paper's own model applied to the same histogram whose moments we fitted, so this is agreement
+between two models on shared inputs, not with a measurement. The matched filter
 and the Bayesian classifier then reach {nlm['fidelity']:.8f} and better, so the loss term, not photon
 statistics, limits this experiment.
 
@@ -294,7 +322,10 @@ trap. The atom peaks are wider than Poisson; the excess corresponds to a relativ
 The paper's error, epsilon = p0 P(S > c_min | no atom), uses a Gaussian for the background. The
 Poisson background with Gaussian read noise has a heavier upper tail (Fig. 4), and at the paper's
 thresholds gives {t1['eps_model_at_cmin'] / t1['eps_gauss_paper_eq4']:.1f} and {t2['eps_model_at_cmin'] / t2['eps_gauss_paper_eq4']:.1f} times the Gaussian value. For trap 1 this is {fmt(t1['eps_model_at_cmin'])}, just above
-the quoted bound of 8e-7; the bound holds for trap 2. The paper's acceptance (Eq. 5) ignores loss
+the quoted bound of 8e-7; the bound holds for trap 2. The bound of 8e-7 is itself the paper's
+Gaussian estimate (Eq. 4), not a measured error rate; V2 contains no measured error rate, so this
+section compares two background models and does not validate the model's FP rate. The paper's
+acceptance (Eq. 5) ignores loss
 during the exposure; with the measured lifetime bound (>6 s) the model gives an acceptance of
 {t1['acceptance_model']:.4f} and {t2['acceptance_model']:.4f}, an upper bound on the loss contribution because the lifetime is a lower bound.
 The retention of >99% per image is consistent with loss model A at that lifetime.
@@ -315,9 +346,12 @@ the simulated single-pixel output, n_b = 0).**
 {v2['tables']['snr']}
 
 Our chain reproduces Eq. (1) exactly, as it should (Poisson x Gaussian for CMOS/CCD; Erlang
-register, F^2 = 2, for the EMCCD). Against the printed table the residuals are within rounding
-({snr_max_ok:.2f}) except the EMCCD at 852 nm for 100 and 1000 photons/px, where the printed values
-correspond to QE = 0.55 rather than the 0.60 of the caption (DERIVED by inverting Eq. 1).
+register, F^2 = 2, for the EMCCD). Against the printed table, which gives one decimal, the residuals
+are within rounding ({SNR_ROUNDING}, half a unit of the last printed digit) except {len(snr_bad)} of {len(snr)} cells:
+{_snr_cells(snr_bad)}. For the {_n_cells(len(snr_bad_emccd), 'EMCCD')} (852 nm column) the printed values correspond to
+QE = 0.55 rather than the 0.60 of the caption (DERIVED by inverting Eq. 1 on those cells, so they
+cannot also confirm it). The {_n_cells(len(snr_bad_other), 'remaining')} exceed{'s' if len(snr_bad_other) == 1 else ''} rounding by a small amount; we have no
+explanation and do not offer one.
 
 ## 5. V3: analytic limits
 
@@ -414,7 +448,7 @@ CPU-hours per point; then the first production status note before the HPC sweeps
 
 ## Provenance ledger
 
-### Values in configs and presets (generated by `python -m camsim_common.placeholders --ledger`)
+### Values in configs and presets (generated by `python -m camsim_common.placeholders --ledger camsim_common/presets/orca_quest_c15550_20up_manetsch.yaml camsim_common/presets/zyla55_picken_globalshutter_200MHz.yaml configs/validation`)
 
 {ledger_markdown(ledger_rows)}
 

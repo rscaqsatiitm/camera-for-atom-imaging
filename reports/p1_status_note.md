@@ -48,3 +48,17 @@ low-rate tail of the site-to-site scattering-rate distribution moves FN by ~17%.
 
 40 placeholders are open (listed at the end of the report). None affects a validation residual
 except the ORCA-Quest read noise, which is fitted.
+
+## Amendment (2026-11-20)
+
+Three statements above are corrected; the text above is left as sent. Details:
+`reports/contact_log_v1_v2.md` (entries V1-7, V1-8, V2-6 and the resolution of 2026-11-20).
+
+1. The FP excess as a non-camera floor is our attribution, not a tested result. V1 validates the
+   FN rate, not the model's FP rate; the scope was set after the FP residual was seen.
+2. The no-loss comparison (0.999996 against 0.99999(1)) is between our model and the paper's
+   lossy-Poisson model on the same histogram, not against a measurement.
+3. The SNR table is reproduced within rounding (0.05) except three of 18 cells: the two EMCCD
+   852 nm cells at 100 and 1000 photons/px (consistent with QE 0.55, a hypothesis) and the Zyla
+   QE 0.6 cell at 100 photons/px (+0.051, unexplained). The earlier text named only the EMCCD
+   column, and the report used a cut of 0.06 while stating 0.05.

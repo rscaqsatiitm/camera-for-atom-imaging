@@ -104,3 +104,24 @@ model-versus-model), V2-6 (three SNR cells exceed the rounding tolerance, not tw
 targets need one (CLAUDE.md rule 10).
 
 Appending: add new entries below with a date; do not delete entries.
+
+## Resolution, 2026-11-20
+
+Wording and one threshold corrected at the source (`p1_atomdet/validation/report.py`), the
+validation report regenerated from the unchanged run outputs, and the repeated statements fixed in
+`reports/p1_interim_report.md`, `reports/latex/p1_interim_report.tex` (PDF rebuilt) and, as a dated
+amendment, `reports/p1_status_note.md`. Before the edits, regenerating the report reproduced the
+committed text exactly except the placeholder list. After them, only the sentences below changed;
+no number or table row moved. The original entries above stay as recorded.
+
+| entry | resolution |
+|---|---|
+| V1-4 | Fig. 1 caption now states that peak position and width agree by construction; only the shape beyond the second moment is a prediction. |
+| V1-7 | Summary item 1 and Sec. 3.3 now call the non-camera attribution a hypothesis, state that the scope was set after the FP residual was seen, and limit V1 to validating FN. |
+| V1-8 | Sec. 3.4 now calls the no-loss comparison model against model on shared inputs. |
+| V2-5 | Sec. 4.2 now states that the 8e-7 bound is the paper's Gaussian estimate and that V2 contains no measured error rate. |
+| V2-6 | The SNR cut is `SNR_ROUNDING = 0.05`, the criterion the text states (half a unit of a one-decimal value); it was 0.06. This tightens the threshold to its stated value, it does not loosen it. Result: 3 of 18 cells exceed rounding (Zyla QE 0.6 at 100 photons/px, +0.051, unexplained; EMCCD QE 0.6 at 100 and 1000 photons/px, +0.277 and +0.720). |
+| scope | `report.py` now scans only the validation-stage files for its placeholder list and ledger, so regeneration keeps the 40-entry list (previously it would have produced 116). |
+
+Not changed: the regenerated figure PNGs differed from the committed ones only by sub-pixel
+rendering (same curves, axes and labels), so the committed PNGs were kept.

@@ -19,16 +19,17 @@ analytic limits.
    of 14 (4.85e-6 against 7.01e-5), so the predicted fidelity, 0.9999725, exceeds the measured
    0.9999374(8). The digitised histogram shows the corresponding excess directly: between 32 and
    42 photons the measured background tail lies 2 to 3 times above any Poisson-plus-read-noise
-   model consistent with the background width. The FP floor of that experiment is therefore set
-   by events outside a camera model (Sec. 3.3), not by the sensor.
+   model consistent with the background width. We attribute this FP floor to events outside a
+   camera model (Sec. 3.3); the attribution is a hypothesis, not tested here.
 2. **Picken et al. (V2, Zyla 5.5, 40 ms).** Fitting only the ADC gain and the background to the
    background peak of each trap gives gains that agree between the two traps
    (0.381 and 0.368 e-/ADU), and trap 1's atom signal then agrees with the stated
    photon budget to 5% (trap 2 is 32% brighter). At the paper's threshold the
    Poisson background gives a readout error 2.9 and 4.0 times larger than the paper's Gaussian
    estimate (9.55e-7 for trap 1, just above the quoted bound of 8e-7). The SNR table
-   (their Table I) is reproduced cell by cell to 0.05 except two cells of the EMCCD 852 nm
-   column (100 and 1000 photons/px), which are consistent with QE = 0.55 rather than the stated 0.60.
+   (their Table I) is reproduced cell by cell within rounding (0.05) except 3 of 18 cells:
+   Zyla, QE 0.6, 100 photons/px (+0.051); EMCCD, QE 0.6, 100 photons/px (+0.277); EMCCD, QE 0.6, 1000 photons/px (+0.720). The two EMCCD cells are consistent with QE = 0.55 rather than the
+   stated 0.60 (a hypothesis, Sec. 4.3); one other cell exceeds rounding and is not explained.
 3. **Analytic limits (V3).** Pure Poisson discrimination is reproduced to 4.42e-14 relative error;
    the stage-by-stage EMCCD Monte Carlo reproduces the finite-register excess noise of Basden et al.
    (F^2 = 1.972 at gain 1000 and 512 stages, tending to 2); dipole collection, the vectorial PSF and the
@@ -155,7 +156,9 @@ Manetsch et al., digitised from a 400 dpi render (axis calibration on the 0, 100
 ticks; resolution about 0.04 decades). Orange dashed: model mixture (1 - F) P(S|0) + F P(S|1) with
 F = 0.512, background 18.66 e- per box, mu = 68.75 e-, read noise 0.115 e- rms per pixel, ADC step
 0.107 e-, empirical rate distribution (Ext. Data Fig. 4d), model-A loss with S = 0.999864. The
-model is not fitted to this curve.*
+model is not fitted to this curve, but its background level, atom signal and read noise were fitted
+to the means and the background width of the same histogram (Table V1-a), so the position and width
+of each peak agree by construction; only the shape beyond the second moment is a prediction.*
 
 ![V1 error curves](figures/v1_errors.png)
 
@@ -175,9 +178,10 @@ residual vapour), (ii) background that varies between sites or shots with a non-
 and (iii) the three-image model-free estimator attributing some loss-recapture sequences to FP.
 Neighbour crosstalk is negligible at 7.2 um spacing with a 1.5 um waist (the Gaussian tail at
 4 um from the neighbour is ~1e-6 of its light), and cosmic-ray hits on a 7x7 box are ~1e-8 per
-image. We therefore regard V1 as validating the camera-and-atom part of the model (FN, histogram
-shape, no-loss fidelity) and report the FP excess as an experimental floor that the camera
-specification cannot remove.
+image. We attribute the FP excess to events outside a camera model, but this attribution is a
+hypothesis: causes (i) to (iii) are untested here. This scope was set after the FP residual was
+seen, so V1 counts as a validation of the model's FN rate and of the histogram shape beyond the
+fitted moments, not of its FP rate (`reports/contact_log_v1_v2.md`, V1-4 and V1-7).
 
 ### 3.4 Sensitivity to the loss model and to the rate distribution
 
@@ -189,7 +193,9 @@ and only the normalised loss-time shape was transferred to the measured survival
 distribution matters at the same level: replacing the empirical Fig. 4d histogram by a Gaussian of
 the same mean and width raises FN from 4.91e-5 to 5.73e-5, because a Gaussian puts more sites in the
 low-rate tail than the histogram shows. Without loss the box classifier reaches F = 0.999996,
-consistent with the paper's lossy-Poisson estimate of 0.99999(1) for zero loss; the matched filter
+consistent with the paper's lossy-Poisson estimate of 0.99999(1) for zero loss. That estimate is the
+paper's own model applied to the same histogram whose moments we fitted, so this is agreement
+between two models on shared inputs, not with a measurement. The matched filter
 and the Bayesian classifier then reach 0.99999999 and better, so the loss term, not photon
 statistics, limits this experiment.
 
@@ -268,7 +274,10 @@ trap. The atom peaks are wider than Poisson; the excess corresponds to a relativ
 The paper's error, epsilon = p0 P(S > c_min | no atom), uses a Gaussian for the background. The
 Poisson background with Gaussian read noise has a heavier upper tail (Fig. 4), and at the paper's
 thresholds gives 2.9 and 4.0 times the Gaussian value. For trap 1 this is 9.55e-7, just above
-the quoted bound of 8e-7; the bound holds for trap 2. The paper's acceptance (Eq. 5) ignores loss
+the quoted bound of 8e-7; the bound holds for trap 2. The bound of 8e-7 is itself the paper's
+Gaussian estimate (Eq. 4), not a measured error rate; V2 contains no measured error rate, so this
+section compares two background models and does not validate the model's FP rate. The paper's
+acceptance (Eq. 5) ignores loss
 during the exposure; with the measured lifetime bound (>6 s) the model gives an acceptance of
 0.9975 and 0.9979, an upper bound on the loss contribution because the lifetime is a lower bound.
 The retention of >99% per image is consistent with loss model A at that lifetime.
@@ -308,9 +317,12 @@ the simulated single-pixel output, n_b = 0).**
 | CCD | 0.2 | 1e+03 | 11.5 | 11.5 | 11.5 | 0.047 |
 
 Our chain reproduces Eq. (1) exactly, as it should (Poisson x Gaussian for CMOS/CCD; Erlang
-register, F^2 = 2, for the EMCCD). Against the printed table the residuals are within rounding
-(0.05) except the EMCCD at 852 nm for 100 and 1000 photons/px, where the printed values
-correspond to QE = 0.55 rather than the 0.60 of the caption (DERIVED by inverting Eq. 1).
+register, F^2 = 2, for the EMCCD). Against the printed table, which gives one decimal, the residuals
+are within rounding (0.05, half a unit of the last printed digit) except 3 of 18 cells:
+Zyla, QE 0.6, 100 photons/px (+0.051); EMCCD, QE 0.6, 100 photons/px (+0.277); EMCCD, QE 0.6, 1000 photons/px (+0.720). For the two EMCCD cells (852 nm column) the printed values correspond to
+QE = 0.55 rather than the 0.60 of the caption (DERIVED by inverting Eq. 1 on those cells, so they
+cannot also confirm it). The one remaining cell exceeds rounding by a small amount; we have no
+explanation and do not offer one.
 
 ## 5. V3: analytic limits
 
@@ -478,7 +490,7 @@ CPU-hours per point; then the first production status note before the HPC sweeps
 
 ## Provenance ledger
 
-### Values in configs and presets (generated by `python -m camsim_common.placeholders --ledger`)
+### Values in configs and presets (generated by `python -m camsim_common.placeholders --ledger camsim_common/presets/orca_quest_c15550_20up_manetsch.yaml camsim_common/presets/zyla55_picken_globalshutter_200MHz.yaml configs/validation`)
 
 | value | location | type | pointer |
 |---|---|---|---|
