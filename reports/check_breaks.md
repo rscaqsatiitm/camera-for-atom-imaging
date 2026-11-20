@@ -61,6 +61,34 @@ break marker remains (`grep "DELIBERATE BREAK"` empty).
 (c) A PLACEHOLDER entry appended to `configs/validation/v3_analytic.yaml`: both tests failed.
 Each restored with `git checkout`; `git status` showed no change to reports or configs.
 
+## 2026-11-20: step-aware control for integer scores (resolves F1)
+
+Registered in commit dc14c24 before its first run: `tests/mc_compare.py::wrong_thresholds_step_aware`,
+shift = max(0.10 x separation, one step of the no-atom score lattice), used by
+`test_wrong_threshold_fails_mc_check_emccd_photon_counting`. The strict-xfail test of F1 was removed;
+its diagnosis above stands.
+
+First run (unbroken): passed.
+
+    reported T_opt=2.000 FP=2.341e-02 FN=1.134e-01
+    T_opt:  T=2.000 FP=2.300e-02 FN=1.137e-01 agrees=True   (clean twin)
+    T_low:  T=1.000 FP=2.185e-01 FN=1.795e-02 agrees=False
+    T_high: T=3.000 FP=1.410e-03 FN=3.330e-01 agrees=False
+
+### B4: one-step floor removed (`d = DELTA_FRAC x separation` only)
+
+Expected: the F1 failure returns. Observed: 1 failed, "wrong threshold (low) passed the check",
+T_low = 1.710 with counts identical to T_opt, as in F1. Restored with `git checkout tests/mc_compare.py`.
+
+The B2 break (comparator rejects everything) already covers the clean-twin assertion, which this
+test shares through `_assert_control`.
+
+## Validation-report SNR cut, 2026-11-20
+
+`report.py` now flags Table I cells above `SNR_ROUNDING = 0.05` (was 0.06). This sets the cut to the
+criterion the text stated, so it tightens rather than loosens. It is a report classification, not a
+pass/fail check; its effect is visible in the report (3 of 18 cells flagged instead of 2).
+
 ## Pending
 
 The checker for the reserved-point criteria (`configs/production/reserved_validation_2026-11-19.yaml`)
