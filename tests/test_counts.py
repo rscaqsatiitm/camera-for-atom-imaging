@@ -12,6 +12,8 @@ from p1_atomdet.optics.array import PSFSpec, pixel_fractions
 from p1_atomdet.sensor.cmos import PixelReadout
 from p1_atomdet.sensor.emccd import EMCCDReadout
 
+from mc_compare import mc_agrees
+
 
 def _site(mu=22.0, bg=0.4, L=2e-3, rs=0.1, box=5, ds=0.01):
     fr = pixel_fractions(PSFSpec("gaussian", waist_m=1.7 * 0.9e-6), 0.9e-6, box)
@@ -62,19 +64,9 @@ def test_lattice_vs_bruteforce_mc_at_1em3(kind):
     n = 1_500_000
     m = mc_error_rates(site, ro, r.threshold, n, rng, kind=kind, weights=clf.weights, llr=clf.llr)
     # matched/bayes statistics are rebinned (linear splitting) on the lattice; MC uses exact values.
-    # Compare at the lattice threshold with a half-step tolerance band.
-    lo, hi = clopper_pearson(m["fp"], n)
-    if kind == "box":
-        assert lo <= r.fp <= hi
-        lo, hi = clopper_pearson(m["fn"], n)
-        assert lo <= r.fn <= hi
-    else:
-        h = p0.h
-        fp_band = (p0.sf(r.threshold + h), p0.sf(r.threshold - h))
-        assert fp_band[0] <= hi and fp_band[1] >= lo
-        lo, hi = clopper_pearson(m["fn"], n)
-        fn_band = (p1.cdf_lt(r.threshold - h), p1.cdf_lt(r.threshold + h))
-        assert fn_band[0] <= hi and fn_band[1] >= lo
+    # Compare at the lattice threshold with a one-step band (predicate in tests/mc_compare.py,
+    # shared with the negative control in tests/test_negative_controls.py).
+    assert mc_agrees(kind, r, p0, p1, m["fp"], m["fn"], n), (kind, r, m)
 
 
 def test_emccd_lattice_vs_mc():
@@ -87,10 +79,7 @@ def test_emccd_lattice_vs_mc():
     rng = np.random.default_rng(7)
     n = 400_000
     m = mc_error_rates(site, ro, r.threshold, n, rng)
-    lo, hi = clopper_pearson(m["fn"], n)
-    assert lo <= r.fn <= hi
-    lo, hi = clopper_pearson(m["fp"], n)
-    assert lo <= r.fp <= hi
+    assert mc_agrees("box", r, p0, p1, m["fp"], m["fn"], n), (r, m)
 
 
 @pytest.mark.slow
