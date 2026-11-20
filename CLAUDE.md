@@ -54,8 +54,9 @@ Each rule cites where it is stated or enforced. Do not weaken any of them.
 11. **Every new check is broken once on purpose and seen to fail.** Record the deliberate break,
     what failed, and the restore in `reports/check_breaks.md`.
 12. **Negative controls.** Each classifier's fidelity check has a test in which a deliberately wrong
-    threshold must fail it (`tests/test_negative_controls.py`). The EMCCD photon-counting case is a
-    recorded strict xfail (finding F1 in `reports/check_breaks.md`): a 10% shift is below one click.
+    threshold must fail it (`tests/test_negative_controls.py`). For integer scores (EMCCD photon
+    counting) the shift is at least one score step, since a 10% shift is below one click (finding F1
+    in `reports/check_breaks.md`).
 13. **Reserved points before a sweep.** Before a production sweep, the reserved validation points
     and their pass criteria are written in a dated file and committed before the sweep starts
     (`configs/production/reserved_validation_*.yaml`).

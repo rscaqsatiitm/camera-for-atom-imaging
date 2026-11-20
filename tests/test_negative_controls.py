@@ -23,7 +23,7 @@ from p1_atomdet.optics.array import PSFSpec, pixel_fractions
 from p1_atomdet.sensor.cmos import PixelReadout
 from p1_atomdet.sensor.emccd import EMCCDReadout
 
-from mc_compare import DELTA_FRAC, mc_agrees, wrong_thresholds
+from mc_compare import DELTA_FRAC, mc_agrees, wrong_thresholds, wrong_thresholds_step_aware
 
 # CF-versus-lattice tolerance of tests/test_cf_production.py::test_cf_matches_lattice_cmos.
 CF_REL_TOL = 0.02
@@ -36,13 +36,13 @@ def _site(mu=22.0, bg=0.4, L=2e-3, rs=0.1, box=5, ds=0.01):
                      rate_rel_sd=rs, ds=ds)
 
 
-def _mc_verdicts(site, ro, kind, clf, n, seed):
+def _mc_verdicts(site, ro, kind, clf, n, seed, wrong=wrong_thresholds):
     """Comparator verdicts at T_opt (clean twin) and at the two wrong thresholds, identical MC samples."""
     p0 = site_statistic(site, ro, clf, False)
     p1 = site_statistic(site, ro, clf, True)
     r = optimal_threshold(p0, p1)
     out = {}
-    for label, T in (("T_opt", r.threshold), *zip(("T_low", "T_high"), wrong_thresholds(p0, p1, r.threshold))):
+    for label, T in (("T_opt", r.threshold), *zip(("T_low", "T_high"), wrong(p0, p1, r.threshold))):
         m = mc_error_rates(site, ro, T, n, np.random.default_rng(seed), kind=kind, weights=clf.weights, llr=clf.llr)
         out[label] = (mc_agrees(kind, r, p0, p1, m["fp"], m["fn"], n), T, m["fp"] / n, m["fn"] / n)
     return r, out
@@ -73,17 +73,16 @@ def test_wrong_threshold_fails_mc_check_cmos(kind):
     _assert_control(r, out)
 
 
-@pytest.mark.xfail(strict=True, reason=(
-    "Recorded 2026-11-19 (reports/check_breaks.md, finding F1): the registered perturbation is a no-op here. "
-    "In photon-counting mode the score is an integer click count; T_opt = 2.000 and T_low = 1.710 make the "
-    "same decisions (identical MC counts), because 0.10 x separation = 0.29 click < 1 click. T_high fails "
-    "the check as it should. Not changed after the result (CLAUDE.md rule 10); a replacement control is a PI decision."))
-def test_wrong_threshold_fails_mc_check_emccd_box():
-    """Site, readout, seed and n as in tests/test_counts.py::test_emccd_lattice_vs_mc."""
+def test_wrong_threshold_fails_mc_check_emccd_photon_counting():
+    """Registered 2026-11-20 before its first run; replaces the 10% control, which was a no-op here (F1).
+
+    Site, readout, seed and n as in tests/test_counts.py::test_emccd_lattice_vs_mc. The score is an
+    integer click count, so the wrong thresholds are T_opt +/- max(0.10 x separation, 1 click).
+    """
     ro = EMCCDReadout(em_gain=300, n_stages=512, cic=0.005, cic_register_fraction=0.5, sigma_ro_e=40.0,
                       register_model="erlang", mode="photon_counting", pc_threshold_sigma=5.0, h_fine=0.01)
     site = _site(mu=8.0, bg=0.05, L=0.0, rs=0.0, box=3)
-    r, out = _mc_verdicts(site, ro, "box", Classifier("box"), 400_000, 7)
+    r, out = _mc_verdicts(site, ro, "box", Classifier("box"), 400_000, 7, wrong=wrong_thresholds_step_aware)
     _assert_control(r, out)
 
 

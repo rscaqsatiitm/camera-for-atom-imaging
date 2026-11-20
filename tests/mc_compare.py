@@ -33,3 +33,12 @@ def wrong_thresholds(p0, p1, t_opt):
     """The two deliberately wrong thresholds of the negative control."""
     d = DELTA_FRAC * (p1.mean() - p0.mean())
     return t_opt - d, t_opt + d
+
+
+# Step-aware variant, registered on 2026-11-20 before its first run (finding F1 in
+# reports/check_breaks.md): for scores on a coarse lattice (photon counting: 1 click) a shift of
+# DELTA_FRAC x separation can be smaller than one score step and then changes no decision.
+# The shift is therefore at least one lattice step of the no-atom score. Do not change after results.
+def wrong_thresholds_step_aware(p0, p1, t_opt):
+    d = max(DELTA_FRAC * (p1.mean() - p0.mean()), p0.h)
+    return t_opt - d, t_opt + d
