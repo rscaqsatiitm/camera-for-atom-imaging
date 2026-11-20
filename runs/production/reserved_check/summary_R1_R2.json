@@ -1,0 +1,20 @@
+{
+ "n_points": 20,
+ "R1": {
+  "points_evaluated": 20,
+  "comparisons_total": 80,
+  "testable": 54,
+  "passed": 54,
+  "untestable": 26,
+  "missing_points": [],
+  "cl": 0.9990740740740741,
+  "pass": true
+ },
+ "R2": {
+  "points_evaluated": 20,
+  "comparisons": 40,
+  "passed": 40,
+  "missing_points": [],
+  "pass": true
+ }
+}

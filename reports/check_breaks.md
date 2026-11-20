@@ -89,8 +89,41 @@ test shares through `_assert_control`.
 criterion the text stated, so it tightens rather than loosens. It is a report classification, not a
 pass/fail check; its effect is visible in the report (3 of 18 cells flagged instead of 2).
 
+## 2026-11-20: reserved-point checker (`p1_atomdet/sweep/reserved_check.py`)
+
+Committed in c5e9829 before its first run on any reserved point; the criteria are those of
+`configs/production/reserved_validation_2026-11-19.yaml` (committed a1c2742), transcribed into
+constants that `tests/test_reserved_check.py` pins to the file.
+
+Unit tests (first run): 7 passed, after a fixture fix (`Lattice` needs a numpy array; no criterion
+involved). They include the negative controls R5(b) (R2 fails when 0.01 is added to a refined
+log10 t) and R5(c) (R3 fails when one S_T(512) moves by twice its half-width).
+
+### B5 to B7: predicates broken on purpose
+
+B5, R2 tolerance set to 1.0: `test_r2_clean_twin_and_negative_control` and the constants guard failed.
+B6, R3 bound widened tenfold: `test_r3_clean_twin_and_negative_control` failed.
+B7, R1 predicate made to accept everything: `test_r1_predicate_detects_a_wrong_rate` failed.
+Each restored with `git checkout`.
+
+### R5(a): live negative control, before any verdict on the reserved points was read
+
+Point chosen before the run: `camera:under_sampled`. The MC applied T +/- 0.10 x separation at
+every offset node. Every testable comparison failed for both signs (FP and FN at 20 ms, FN at
+80 ms; FP at 80 ms below the testability floor). R5(a) passed.
+
+### Result on the 20 reserved points (2026-11-20, `runs/production/reserved_check/`)
+
+R1: 54 of 54 testable comparisons agree at the Bonferroni level 0.99907 (M = 54). The largest
+deviations of the pooled MC rate from the production rate are 9 to 12%, all at 80 ms on rates
+near the testability floor (about 100 expected counts, relative s.d. about 10%). 26 of 80
+comparisons are untestable (rates below 2.8e-5, 19 of them at 80 ms); R1 therefore does not test
+rates below about 2e-5. R2: 40 of 40 pass; the largest change is +0.0024 in log10 t (0.55% in t,
+`camera:under_sampled` and `full:under_sampled` at 1e-4) against 0.0043; 4 target cases are
+unreached at both resolutions. The plumbing null (explicit scenario merge equals the production
+path) held at all 20 points. R4: 20 of 20 points evaluated in R1 and R2, none missing.
+
 ## Pending
 
-The checker for the reserved-point criteria (`configs/production/reserved_validation_2026-11-19.yaml`)
-is not written; its deliberate breaks are criterion R5 of that file and must be recorded here
-before its output on the reserved points is read.
+R3 needs the full N = 1024 results of both designs (cluster run). The cluster pilot of
+CLAUDE.md rule 14 is also pending.
